@@ -19,10 +19,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (firstMount) {
-      BlocProvider.of<AppBloc>(context).add(LoadingEvent(
-        localizations: AppLocalizations.of(context),
-      ));
-      firstMount = false;
+      Future.delayed(Duration(seconds: 1), () {
+        BlocProvider.of<AppBloc>(context).add(LoadingEvent(
+          localizations: AppLocalizations.of(context),
+        ));
+        firstMount = false;
+      });
     }
   }
 

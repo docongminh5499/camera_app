@@ -50,7 +50,6 @@ class DecorateTitleScaffold extends StatelessWidget {
         top: false,
         bottom: false,
         child: Scaffold(
-          
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text(title),
