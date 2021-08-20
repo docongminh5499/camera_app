@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
 import 'package:my_camera_app_demo/features/account/presentation/pages/account_page.dart';
 import 'package:my_camera_app_demo/features/analysis/presentation/pages/analysis_page.dart';
@@ -38,7 +39,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context);
-
+    Constants.localizations = localizations;
+    
     return BlocProvider(
       create: (BuildContext context) => bloc,
       child: DecorateTitleScaffold(

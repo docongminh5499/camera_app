@@ -31,6 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context);
+    Constants.localizations = localizations;
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(

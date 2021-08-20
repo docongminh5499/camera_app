@@ -6,6 +6,12 @@ class CacheException implements Exception {}
 
 class SavePictureException implements Exception {}
 
+class RemoteSavePictureException implements Exception {}
+
+class GetFileException implements Exception {}
+
+class DeleteFileException implements Exception {}
+
 class RemoteAccountException implements Exception {}
 
 class CreateAccountException implements Exception {

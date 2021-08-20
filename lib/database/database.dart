@@ -1,11 +1,11 @@
-import 'package:my_camera_app_demo/database/model_sql.dart';
-
+import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
+import 'package:my_camera_app_demo/features/gallery/domain/entities/deleted_items.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 
 Future<void> initDatabase() async {
-  List<ModelSQL> modelSQL = [];
+  List<dynamic> modelSQLClass = [Picture, DeleteItem];
 
   Constants.database = await openDatabase(
     join(
@@ -13,7 +13,7 @@ Future<void> initDatabase() async {
       'camera_app.db',
     ),
     onCreate: (db, version) {
-      return modelSQL.forEach(
+      return modelSQLClass.forEach(
         (model) async => await db.execute(model.onCreate()),
       );
     },

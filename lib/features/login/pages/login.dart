@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/fade_widget.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/features/login/bloc/login_bloc.dart';
@@ -53,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context);
+    Constants.localizations = localizations;
     bool darkmode = getCurrentBlocState().setting.isDarkModeOn;
 
     return DecoratedLoginContainer(

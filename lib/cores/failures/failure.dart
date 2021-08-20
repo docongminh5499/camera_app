@@ -34,3 +34,9 @@ class RemoveAccountFailure extends Failure {
   @override
   List<Object> get props => <dynamic>[statusCode];
 }
+
+class GetFileFailure extends Failure {}
+
+class DeleteFailure extends Failure {}
+
+class SavePictureFailure extends Failure {}

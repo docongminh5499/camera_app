@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Constants {
@@ -7,6 +8,7 @@ class Constants {
   static String cacheUserKey = "CACHE_USER_KEY";
   static String cacheSettingKey = "CACHE_SETTING_KEY";
   static String cacheDefaultSettingKey = "CACHE_DEFAULT_SETTING_KEY";
+  static String cachedTimeSyncKey = "CACHE_TIME_SYNC_KEY";
 
   static String appName = "Camera App";
   static bool defaultDarkmodeOn = false;
@@ -25,7 +27,8 @@ class Constants {
     "addAccount": "$protocol://$server/add-account",
     "modifyAccount": "$protocol://$server/modify-account",
     "removeAccount": "$protocol://$server/remove-account",
-    "analysisImage": "$protocol://$server/analysis-image"
+    "analysisImage": "$protocol://$server/analysis-image",
+    "saveImage": "$protocol://$server/save-image",
   };
 
   static List<Map<String, dynamic>> locales = [
@@ -35,4 +38,5 @@ class Constants {
 
   static Database database;
   static int timeoutSecond = 15;
+  static AppLocalizations localizations;
 }
