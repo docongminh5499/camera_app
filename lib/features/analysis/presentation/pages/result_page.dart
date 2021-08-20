@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
 
 class ResultPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return DecorateTitleScaffold(
       color: themeColor,

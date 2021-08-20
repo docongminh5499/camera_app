@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
 import 'package:my_camera_app_demo/features/account/domain/entities/account.dart';
 import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc.dart';
@@ -46,7 +47,7 @@ class _ModifyAccountPageState extends State<ModifyAccountPage> {
       errorMessage = "";
     });
 
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
     if (username.length == 0) {
       return this.setState(() {
         errorMessage = localizations.translate('requireError');
@@ -58,7 +59,6 @@ class _ModifyAccountPageState extends State<ModifyAccountPage> {
       username: username,
       admin: admin,
       id: widget.account.id,
-      localizations: localizations,
     ));
   }
 
@@ -89,7 +89,7 @@ class _ModifyAccountPageState extends State<ModifyAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return DecorateTitleScaffold(
       color: widget.themeColor,
@@ -165,60 +165,30 @@ class _ModifyAccountPageState extends State<ModifyAccountPage> {
                 //     ),
                 //   ],
                 // ),
-                BlocListener(bloc: bloc, listener:  (context, state) {
-                  if (state is SuccessModifyAccount) {
-                    Future.delayed(Duration(milliseconds: 200), () {
-                      Navigator.of(context).pop();
-                      widget.updateParent();
-                    });
-                  }
-                }, child: BlocProvider(
-                  create: (BuildContext context) => bloc,
-                  child: BlocBuilder<AccountBloc, AccountState>(
-                      builder: (BuildContext context, AccountState state) {
-                        if (state is ErrorModifyAccount) {
-                          return Column(
-                            children: [
-                              Text(state.message, textAlign: TextAlign.center),
-                              SizedBox(height: 10),
-                              ElevatedButton(
-                                onPressed: onModifyAccount,
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    widget.themeColor,
-                                  ),
-                                ),
-                                child: Text(localizations.translate('save')),
-                              )
-                            ],
-                          );
-                        } else if (state is SuccessModifyAccount) {
-                          return Column(
-                            children: [
-                              SizedBox(height: 30),
-                              Icon(
-                                Icons.check_circle,
-                                size: 40,
-                                color: widget.themeColor,
-                              ),
-                            ],
-                          );
-                        } else if (state is ModifyingAccount) {
-                          return CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              widget.themeColor,
-                            ),
-                          );
-                        }
-
+                BlocListener(
+                  bloc: bloc,
+                  listener: (context, state) {
+                    if (state is SuccessModifyAccount) {
+                      Future.delayed(Duration(milliseconds: 200), () {
+                        Navigator.of(context).pop();
+                        widget.updateParent();
+                      });
+                    }
+                  },
+                  child: BlocProvider(
+                    create: (BuildContext context) => bloc,
+                    child: BlocBuilder<AccountBloc, AccountState>(
+                        builder: (BuildContext context, AccountState state) {
+                      if (state is ErrorModifyAccount) {
                         return Column(
                           children: [
-                            Text(errorMessage, textAlign: TextAlign.center),
+                            Text(state.message, textAlign: TextAlign.center),
                             SizedBox(height: 10),
                             ElevatedButton(
                               onPressed: onModifyAccount,
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
                                   widget.themeColor,
                                 ),
                               ),
@@ -226,8 +196,43 @@ class _ModifyAccountPageState extends State<ModifyAccountPage> {
                             )
                           ],
                         );
-                      }),
-                ),),
+                      } else if (state is SuccessModifyAccount) {
+                        return Column(
+                          children: [
+                            SizedBox(height: 30),
+                            Icon(
+                              Icons.check_circle,
+                              size: 40,
+                              color: widget.themeColor,
+                            ),
+                          ],
+                        );
+                      } else if (state is ModifyingAccount) {
+                        return CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            widget.themeColor,
+                          ),
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          Text(errorMessage, textAlign: TextAlign.center),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: onModifyAccount,
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                widget.themeColor,
+                              ),
+                            ),
+                            child: Text(localizations.translate('save')),
+                          )
+                        ],
+                      );
+                    }),
+                  ),
+                ),
               ],
             ),
           ),

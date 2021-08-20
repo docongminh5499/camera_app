@@ -31,7 +31,7 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
     Locale locale = localizations.currentLocale;
 
     Map<String, dynamic> currentLanguage = Constants.locales.firstWhere(

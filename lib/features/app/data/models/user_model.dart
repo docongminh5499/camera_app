@@ -3,9 +3,19 @@ import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/app/domain/entities/user.dart';
 
 class UserModel extends User {
-  UserModel(
-      {@required username, @required password, @required jwt, @required role})
-      : super(username: username, password: password, jwt: jwt, role: role);
+  UserModel({
+    @required id,
+    @required username,
+    @required password,
+    @required jwt,
+    @required role,
+  }) : super(
+          id: id,
+          username: username,
+          password: password,
+          jwt: jwt,
+          role: role,
+        );
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     String role;
@@ -19,6 +29,7 @@ class UserModel extends User {
     }
 
     return UserModel(
+        id: json['_id'],
         username: json['username'],
         password: json['password'],
         jwt: json['jwt'],
@@ -27,6 +38,7 @@ class UserModel extends User {
 
   Map<String, dynamic> toJson() {
     return {
+      "_id": this.id,
       'username': username,
       'password': password,
       'jwt': jwt,

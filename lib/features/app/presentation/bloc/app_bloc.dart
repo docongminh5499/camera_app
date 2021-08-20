@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
 import 'package:my_camera_app_demo/cores/usecases/usecase.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/app/domain/entities/setting.dart';
 import 'package:my_camera_app_demo/features/app/domain/entities/user.dart';
 import 'package:my_camera_app_demo/features/app/domain/usecases/auto_login.dart';
@@ -45,10 +46,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   @override
   Stream<AppState> mapEventToState(AppEvent event) async* {
+    AppLocalizations localizations = Constants.localizations;
+
     if (event is LoadingEvent) {
       // Load setting
       Setting setting = await getCachedSettingUsecase(NoParams());
-      await event.localizations.load(Locale(
+      await localizations.load(Locale(
         setting.currentLanguageCode,
         setting.currentCountryCode,
       ));

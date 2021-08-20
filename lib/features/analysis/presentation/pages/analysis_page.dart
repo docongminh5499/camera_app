@@ -42,7 +42,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
   }
 
   void onAnalysisPicture() async {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     if (image != null) {
       Uri url = Uri.parse(Constants.urls["analysisImage"]);
@@ -113,7 +113,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
   }
 
   Widget getPreviewImage(context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
     if (image == null)
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +134,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return DecorateTitleScaffold(
       color: widget.themeColor,

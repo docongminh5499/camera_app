@@ -2,6 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
+import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/features/camera/presentation/bloc/camera_bloc.dart';
 import 'package:my_camera_app_demo/features/camera/presentation/widgets/my_button_icon.dart';
 import 'package:my_camera_app_demo/injections/injection.dart';
@@ -23,6 +25,15 @@ class _CameraPageState extends State<CameraPage>
   CameraBloc bloc;
   int _selected = 0;
   bool firstMount = true;
+
+  AppBloc getAppBloc() {
+    return BlocProvider.of<AppBloc>(context);
+  }
+
+  LoggedInState getAppBlocState() {
+    AppBloc bloc = getAppBloc();
+    return bloc.state;
+  }
 
   @override
   void initState() {
@@ -82,7 +93,7 @@ class _CameraPageState extends State<CameraPage>
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return Scaffold(
       body: SafeArea(
@@ -93,73 +104,104 @@ class _CameraPageState extends State<CameraPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              BlocBuilder<CameraBloc, CameraState>(
-                  builder: (BuildContext context, CameraState state) {
-                if (state is CameraLoading) {
-                  return Expanded(
+              BlocListener(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state is CameraTakePicureError) {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text(state.message),
+                          actions: [
+                            TextButton(
+                              child: Text(
+                                localizations.translate('close'),
+                                style: TextStyle(
+                                  color: getAppBlocState().setting.isDarkModeOn
+                                      ? Color(0xFFBB6122)
+                                      : Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: BlocBuilder<CameraBloc, CameraState>(
+                    builder: (BuildContext context, CameraState state) {
+                  if (state is CameraLoading) {
+                    return Expanded(
+                        flex: 1,
+                        child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [CircularProgressIndicator()],
+                        ));
+                  } else if (state is CameraError) {
+                    return Expanded(
                       flex: 1,
                       child: Flex(
                         direction: Axis.vertical,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [CircularProgressIndicator()],
-                      ));
-                } else if (state is CameraError) {
-                  return Expanded(
-                    flex: 1,
-                    child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error,
-                          size: 60,
-                          color: Colors.red,
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          localizations.translate('cameraError'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        children: [
+                          Icon(
+                            Icons.error,
+                            size: 60,
                             color: Colors.red,
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.green,
+                          SizedBox(height: 10),
+                          Text(
+                            localizations.translate('cameraError'),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
                             ),
                           ),
-                          onPressed: () {
-                            bloc.add(StartLoadCameraEvent());
-                            setupCamera()
-                                .then((value) => bloc.add(LoadCameraEvent()))
-                                .onError((error, stackTrace) =>
-                                    bloc.add(ErrorLoadCameraEvent()));
-                          },
-                          child: Text(localizations.translate('tryAgain')),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Expanded(
-                    flex: 1,
-                    child: AnimatedBuilder(
-                        animation: _animationController,
-                        builder: (BuildContext context, _) {
-                          return Opacity(
-                            opacity: _opacityAnimation.value,
-                            child: CameraPreview(_controller),
-                          );
-                        }),
-                  );
-                }
-              }),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.green,
+                              ),
+                            ),
+                            onPressed: () {
+                              bloc.add(StartLoadCameraEvent());
+                              setupCamera()
+                                  .then((value) => bloc.add(LoadCameraEvent()))
+                                  .onError((error, stackTrace) =>
+                                      bloc.add(ErrorLoadCameraEvent()));
+                            },
+                            child: Text(localizations.translate('tryAgain')),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                      flex: 1,
+                      child: AnimatedBuilder(
+                          animation: _animationController,
+                          builder: (BuildContext context, _) {
+                            return Opacity(
+                              opacity: _opacityAnimation.value,
+                              child: CameraPreview(_controller),
+                            );
+                          }),
+                    );
+                  }
+                }),
+              ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.20,
                 decoration: BoxDecoration(color: Colors.black87),
@@ -179,7 +221,11 @@ class _CameraPageState extends State<CameraPage>
                             _animationController.reset();
                             _animationController.forward();
                             final image = await _controller.takePicture();
-                            bloc.add(TakePictureEvent(path: image.path));
+                            bloc.add(TakePictureEvent(
+                              path: image.path,
+                              userId: getAppBlocState().currentUser.id,
+                              jwt: getAppBlocState().currentUser.jwt,
+                            ));
                           } else if (await Permission.storage.status.isDenied) {
                             await Permission.storage.request();
                           }

@@ -51,5 +51,6 @@
     "analysisError": "Something went wrong. Please try again.",
     "analysisSuccess": "Analysis successfully",
     "result": "Result",
-    "welcomeBack": "Welcome back!"
+    "welcomeBack": "Welcome back!",
+    "takePictureError": "Something went wrong. Please try again."
 }

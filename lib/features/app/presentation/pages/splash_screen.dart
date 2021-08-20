@@ -20,9 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.didChangeDependencies();
     if (firstMount) {
       Future.delayed(Duration(seconds: 1), () {
-        BlocProvider.of<AppBloc>(context).add(LoadingEvent(
-          localizations: AppLocalizations.of(context),
-        ));
+        BlocProvider.of<AppBloc>(context).add(LoadingEvent());
         firstMount = false;
       });
     }
@@ -32,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context);
     Constants.localizations = localizations;
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(

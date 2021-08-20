@@ -51,5 +51,6 @@
     "analysisError": "Xảy ra lỗi, vui lòng thử lại",
     "analysisSuccess": "Phân tích thành công",
     "result": "Kết quả",
-    "welcomeBack": "Chào mừng trở lại!"
+    "welcomeBack": "Chào mừng trở lại!",
+    "takePictureError": "Xảy ra lỗi, vui lòng thử lại"
 }

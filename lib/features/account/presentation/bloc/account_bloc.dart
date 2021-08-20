@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:my_camera_app_demo/cores/failures/failure.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/account/domain/entities/account.dart';
 import 'package:my_camera_app_demo/features/account/domain/usecases/add_account.dart';
 import 'package:my_camera_app_demo/features/account/domain/usecases/get_list_account.dart';
@@ -27,6 +28,8 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
   @override
   Stream<AccountState> mapEventToState(AccountEvent event) async* {
+    AppLocalizations localizations = Constants.localizations;
+    
     if (event is LoadAccountEvent) {
       yield LoadingAccount();
       final result = await getListAccountUsecase(
@@ -49,9 +52,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         String message;
 
         if (error.statusCode == 409)
-          message = event.localizations.translate('sameAccountError');
+          message = localizations.translate('sameAccountError');
         else
-          message = event.localizations.translate('serverError');
+          message = localizations.translate('serverError');
         return ErrorCreateAccount(message: message);
       }, (account) => SuccessCreateAccount(account: account));
     } else if (event is ModifyAccountEvent) {
@@ -67,15 +70,15 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         String message;
 
         if (error.statusCode == 409)
-          message = event.localizations.translate('sameAccountError');
+          message = localizations.translate('sameAccountError');
         else if (error.statusCode == 400)
-          message = event.localizations.translate('requireError');
+          message = localizations.translate('requireError');
         else if (error.statusCode == 401)
-          message = event.localizations.translate('perrmissionError');
+          message = localizations.translate('perrmissionError');
         else if (error.statusCode == 404)
-          message = event.localizations.translate('notFoundError');
+          message = localizations.translate('notFoundError');
         else
-          message = event.localizations.translate('serverError');
+          message = localizations.translate('serverError');
         return ErrorModifyAccount(message: message);
       }, (account) => SuccessModifyAccount(account: account));
     } else if (event is RemoveAccountEvent) {
@@ -90,15 +93,15 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         String message;
 
         if (error.statusCode == 409)
-          message = event.localizations.translate('deleteDependenceError');
+          message = localizations.translate('deleteDependenceError');
         else if (error.statusCode == 400)
-          message = event.localizations.translate('requireError');
+          message = localizations.translate('requireError');
         else if (error.statusCode == 401)
-          message = event.localizations.translate('perrmissionError');
+          message = localizations.translate('perrmissionError');
         else if (error.statusCode == 404)
-          message = event.localizations.translate('notFoundError');
+          message = localizations.translate('notFoundError');
         else
-          message = event.localizations.translate('serverError');
+          message = localizations.translate('serverError');
         yield ErrorRemoveAccount(
           message: message,
           accounts: currentState.accounts,
@@ -109,7 +112,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         );
         yield getAccountListResult.fold(
           (failure) => ErrorRemoveAccount(
-            message: event.localizations.translate('serverError'),
+            message: localizations.translate('serverError'),
             accounts: currentState.accounts,
           ),
           (accounts) => SuccessRemoveAccount(

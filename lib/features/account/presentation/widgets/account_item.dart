@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/account/domain/entities/account.dart';
 import 'package:my_camera_app_demo/features/account/presentation/pages/modify_account.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
@@ -35,7 +36,7 @@ class _AccountItemState extends State<AccountItem> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return Container(
       margin: EdgeInsets.only(bottom: 15),

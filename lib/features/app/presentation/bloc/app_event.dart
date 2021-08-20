@@ -18,12 +18,7 @@ class CacheDefaultSettingEvent extends AppEvent {
       ];
 }
 
-class LoadingEvent extends AppEvent {
-  final AppLocalizations localizations;
-  LoadingEvent({@required this.localizations});
-  @override
-  List<Object> get props => <dynamic>[localizations];
-}
+class LoadingEvent extends AppEvent {}
 
 class LoginSuccessfulEvent extends AppEvent {
   final User user;

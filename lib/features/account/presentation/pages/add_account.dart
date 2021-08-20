@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
 import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
@@ -46,7 +47,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
       errorMessage = "";
     });
 
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     if (username.length == 0 ||
         password.length == 0 ||
@@ -67,7 +68,6 @@ class _AddAccountPageState extends State<AddAccountPage> {
       username: username,
       password: password,
       admin: admin,
-      localizations: localizations,
     ));
   }
 
@@ -130,7 +130,7 @@ class _AddAccountPageState extends State<AddAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return DecorateTitleScaffold(
       color: widget.themeColor,

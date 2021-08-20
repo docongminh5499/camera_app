@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
 import 'package:my_camera_app_demo/features/account/domain/entities/account.dart';
 import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc.dart';
@@ -40,12 +41,11 @@ class _AccountPageState extends State<AccountPage> {
     bloc.add(RemoveAccountEvent(
       jwt: getAppBlocState().currentUser.jwt,
       id: id,
-      localizations: AppLocalizations.of(context),
     ));
   }
 
   void showDialogHandler(dynamic state) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     if (modelOpen) {
       Navigator.of(context).pop();
@@ -129,7 +129,7 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations localizations = AppLocalizations.of(context);
+    AppLocalizations localizations = Constants.localizations;
 
     return BlocProvider(
       create: (BuildContext context) => bloc,
