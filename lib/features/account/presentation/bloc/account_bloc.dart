@@ -28,6 +28,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   @override
   Stream<AccountState> mapEventToState(AccountEvent event) async* {
     if (event is LoadAccountEvent) {
+      yield LoadingAccount();
       final result = await getListAccountUsecase(
         GetListAccountParams(jwt: event.jwt),
       );

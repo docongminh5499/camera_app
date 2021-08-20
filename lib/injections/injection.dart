@@ -2,6 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_camera_app_demo/cores/network/network_info.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_injection.dart' as login;
 import 'app_injection.dart' as app;
@@ -29,4 +30,5 @@ Future<void> init() async {
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(() => Constants.database);
 }

@@ -24,7 +24,7 @@ class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
       Uri.parse(Constants.urls['getAccount']),
       body: {'token': jwt},
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 
@@ -48,7 +48,7 @@ class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
         'admin': admin.toString(),
       },
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 
@@ -70,7 +70,7 @@ class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
         'admin': admin.toString(),
       },
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 
@@ -86,7 +86,7 @@ class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
       Uri.parse(Constants.urls['removeAccount']),
       body: {'token': jwt, 'id': id},
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 

@@ -34,4 +34,5 @@ class Constants {
   ];
 
   static Database database;
+  static int timeoutSecond = 15;
 }

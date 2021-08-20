@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FadeWidget(
-                    delay: Duration(milliseconds: 500),
+                    delay: Duration(milliseconds: 250),
                     duration: Duration(milliseconds: 1000),
                     child: Text(
                       localizations.translate("signIn"),
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   SizedBox(height: 10),
                   FadeWidget(
-                    delay: Duration(milliseconds: 1000),
+                    delay: Duration(milliseconds: 500),
                     duration: Duration(milliseconds: 1000),
                     child: Text(
                       localizations.translate("welcomeBack"),
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FadeWidget(
-                    delay: Duration(milliseconds: 1000),
+                    delay: Duration(milliseconds: 500),
                     duration: Duration(milliseconds: 1000),
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   FadeWidget(
-                    delay: Duration(milliseconds: 1200),
+                    delay: Duration(milliseconds: 700),
                     duration: Duration(milliseconds: 1000),
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           SizedBox(height: 30),
                           FadeWidget(
-                            delay: Duration(milliseconds: 1400),
+                            delay: Duration(milliseconds: 900),
                             duration: Duration(milliseconds: 1000),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.3,

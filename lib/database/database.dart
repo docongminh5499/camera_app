@@ -17,5 +17,6 @@ Future<void> initDatabase() async {
         (model) async => await db.execute(model.onCreate()),
       );
     },
+    version: 1,
   );
 }

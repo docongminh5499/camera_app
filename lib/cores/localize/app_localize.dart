@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:my_camera_app_demo/cores/utils/constants.dart';
 
 class AppLocalizations {
   Locale currentLocale;
@@ -40,7 +41,10 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'vi'].contains(locale.languageCode);
+    List<dynamic> supportedLanguageCode = Constants.locales.map((item) {
+      return item['locale'].languageCode;
+    }).toList();
+    return supportedLanguageCode.contains(locale.languageCode);
   }
 
   @override

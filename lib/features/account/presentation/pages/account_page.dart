@@ -177,59 +177,32 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
             SizedBox(height: 10),
-            BlocBuilder<AccountBloc, AccountState>(
-              builder: (BuildContext context, AccountState state) {
-                if (state is LoadingAccount) {
-                  return Expanded(
-                    child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            widget.themeColor,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                } else if (state is ErrorLoadingAccount) {
-                  return Expanded(
-                    child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          localizations.translate('errorLoadAccount'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: fetchAccount,
-                          child: Text(localizations.translate('tryAgain')),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
+            BlocListener(
+              bloc: bloc,
+              listener: (BuildContext context, AccountState state) {
+                if (!(state is LoadingAccount &&
+                    state is ErrorLoadingAccount)) {
+                  showDialogHandler(state);
+                }
+              },
+              child: BlocBuilder<AccountBloc, AccountState>(
+                builder: (BuildContext context, AccountState state) {
+                  if (state is LoadingAccount) {
+                    return Expanded(
+                      child: Flex(
+                        direction: Axis.vertical,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
                               widget.themeColor,
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  Future.microtask(() => showDialogHandler(state));
-
-                  LoadedAccount currentState = state;
-                  accounts = currentState.accounts;
-
-                  if (currentState.accounts.length == 0) {
+                          )
+                        ],
+                      ),
+                    );
+                  } else if (state is ErrorLoadingAccount) {
                     return Expanded(
                       child: Flex(
                         direction: Axis.vertical,
@@ -237,39 +210,73 @@ class _AccountPageState extends State<AccountPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            localizations.translate('noAccount'),
+                            localizations.translate('errorLoadAccount'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.grey,
+                              color: Colors.red,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: fetchAccount,
+                            child: Text(localizations.translate('tryAgain')),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                widget.themeColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     );
-                  }
+                  } else {
+                    LoadedAccount currentState = state;
+                    accounts = currentState.accounts;
 
-                  List<Widget> accountWidgets = currentState.accounts
-                      .map((account) => AccountItem(
-                            account: account,
-                            removeAccount: removeAccount,
-                            themeColor: widget.themeColor,
-                            updateParentPage: fetchAccount,
-                          ))
-                      .toList();
+                    if (currentState.accounts.length == 0) {
+                      return Expanded(
+                        child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              localizations.translate('noAccount'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
 
-                  return Expanded(
-                    child: Container(
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        padding: const EdgeInsets.all(8),
-                        children: accountWidgets,
+                    List<Widget> accountWidgets = currentState.accounts
+                        .map((account) => AccountItem(
+                              account: account,
+                              removeAccount: removeAccount,
+                              themeColor: widget.themeColor,
+                              updateParentPage: fetchAccount,
+                            ))
+                        .toList();
+
+                    return Expanded(
+                      child: Container(
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          padding: const EdgeInsets.all(8),
+                          children: accountWidgets,
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),

@@ -21,7 +21,7 @@ class RemoteLoginDataSourceImplmentation implements RemoteLoginDatasource {
       Uri.parse(Constants.urls["login"]),
       body: {'username': username, 'password': password},
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 
@@ -36,7 +36,7 @@ class RemoteLoginDataSourceImplmentation implements RemoteLoginDatasource {
       Uri.parse(Constants.urls["verifyToken"]),
       body: {'token': user.jwt},
     ).timeout(
-      Duration(seconds: 2),
+      Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
 
