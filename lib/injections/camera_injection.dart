@@ -17,6 +17,7 @@ void init(GetIt sl) {
   sl.registerLazySingleton<CameraRepository>(() => CameraRepositoryImpl(
         localCameraDatasource: sl(),
         remoteCameraDatasource: sl(),
+        networkInfo: sl(),
       ));
   // * DATA SOURCE
   sl.registerLazySingleton<LocalCameraDatasource>(

@@ -11,7 +11,7 @@ class SettingRepositoryImplementation implements SettingRepository {
 
   SettingRepositoryImplementation({@required this.dataSource});
 
-  Future<Setting> changeLanguague(
+  Future<Setting> changeLanguage(
     String languageCode,
     String countryCode,
   ) async {

@@ -19,7 +19,9 @@ class Picture extends Equatable {
   static String table = "PICTURE";
   static String onCreate() {
     return """
-    CREATE TABLE PICTURE (
+    CREATE TABLE """ +
+        Picture.table +
+        """ (
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
       serverId TEXT,
       userId TEXT NOT NULL,

@@ -45,8 +45,8 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
     CachedJWTModel jwt = CachedJWTModel(jwt: model.jwt, userId: model.id);
     final id = await database.insert(
       CachedJWT.table,
-      jwt.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      jwt.toJson(notNull: true),
+      conflictAlgorithm: ConflictAlgorithm.abort,
     );
     return CachedJWTModel(jwt: model.jwt, id: id, userId: model.id);
   }

@@ -22,8 +22,10 @@ void init(GetIt sl) {
   sl.registerLazySingleton(() => ModifyAccountUsecase(accountRepository: sl()));
   sl.registerLazySingleton(() => RemoveAccountUsecase(accountRepository: sl()));
   // * REPOSITORY
-  sl.registerLazySingleton<AccountRepository>(
-      () => AccountRepositoryImpl(remoteAccountDatasource: sl()));
+  sl.registerLazySingleton<AccountRepository>(() => AccountRepositoryImpl(
+        remoteAccountDatasource: sl(),
+        networkInfo: sl(),
+      ));
   // * DATASOURCE
   sl.registerLazySingleton<RemoteAccountDatasource>(
       () => RemoteAccountDatasourceImpl(client: sl()));

@@ -35,10 +35,11 @@ class LoginRepositoryImplement implements LoginRepository {
 
   Future<Either<Failure, User>> autoLogin() async {
     try {
-      final user = await localLoginDatasource.getCachedUser();
-      final result = await remoteLoginDatasource.verifyJWT(user);
-      if (result) return Right(user);
-      throw CacheException();
+        final user = await localLoginDatasource.getCachedUser();
+        return Right(user);
+        // final result = await remoteLoginDatasource.verifyJWT(user);
+        // if (result) return Right(user);
+        // throw CacheException();
     } on CacheException {
       return Left(AutoLoginFailure());
     }

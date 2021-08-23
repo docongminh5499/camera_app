@@ -20,7 +20,7 @@ class LocalCameraDatasourceImpl implements LocalCameraDatasource {
     return await database.insert(
       Picture.table,
       model.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.abort,
     );
   }
 

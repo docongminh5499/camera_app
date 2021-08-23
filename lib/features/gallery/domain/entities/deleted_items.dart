@@ -15,7 +15,9 @@ class DeleteItem extends Equatable {
   static String table = "DELETE_ITEM";
   static String onCreate() {
     return """
-    CREATE TABLE DELETE_ITEM (
+    CREATE TABLE """ +
+        DeleteItem.table +
+        """ (
       id INTEGER PRIMARY KEY, 
       serverId TEXT,
       deletedTime DATETIME NOT NULL

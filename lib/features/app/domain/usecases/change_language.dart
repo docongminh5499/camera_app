@@ -10,7 +10,7 @@ class ChangeLanguageUsecase extends NoFailureUsecase<Setting, LanguageParams> {
   ChangeLanguageUsecase({@required this.repository});
 
   Future<Setting> call(LanguageParams params) async {
-    return await repository.changeLanguague(
+    return await repository.changeLanguage(
         params.languageCode, params.countryCode);
   }
 }

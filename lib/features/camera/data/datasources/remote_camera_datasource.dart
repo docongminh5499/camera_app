@@ -16,7 +16,12 @@ class RemoteCameraDatasourceImpl implements RemoteCameraDatasource {
   Future<void> sendPicture(String jwt, PictureModel model) async {
     final response = await client.post(
       Uri.parse(Constants.urls['saveImage']),
-      body: {'token': jwt, 'data': model.toJson()},
+      body: {
+        'token': jwt,
+        'userId': model.userId,
+        'data': model.data,
+        'lastModifyTime': model.lastModifyTime.toUtc().toString(),
+      },
     ).timeout(
       Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),

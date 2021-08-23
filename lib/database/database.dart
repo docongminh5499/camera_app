@@ -11,9 +11,12 @@ Future<void> initDatabase() async {
       await getDatabasesPath(),
       'camera_app.db',
     ),
-    onCreate: (db, version) async {
+    onCreate: (Database db, int version) async {
+      print("Creating Picture table");
       await db.execute(Picture.onCreate());
+      print("Creating DeleteItem table");
       await db.execute(DeleteItem.onCreate());
+      print("Creating CachedJWT table");
       await db.execute(CachedJWT.onCreate());
     },
     version: 1,

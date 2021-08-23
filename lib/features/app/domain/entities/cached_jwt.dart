@@ -15,10 +15,12 @@ class CachedJWT extends Equatable {
   static String table = "JWT";
   static String onCreate() {
     return """
-    CREATE TABLE JWT (
+    CREATE TABLE """ +
+        CachedJWT.table +
+        """ (
       id INTEGER PRIMARY KEY AUTOINCREMENT, 
       userId TEXT NOT NULL,
-      jwt TEXT NOT NULL,
+      jwt TEXT NOT NULL
     )""";
   }
 

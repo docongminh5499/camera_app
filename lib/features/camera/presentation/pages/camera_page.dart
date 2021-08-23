@@ -217,18 +217,19 @@ class _CameraPageState extends State<CameraPage>
                       onPress: () async {
                         if (_controller != null &&
                             _controller.value.isInitialized) {
-                          if (await Permission.storage.status.isGranted) {
-                            _animationController.reset();
-                            _animationController.forward();
-                            final image = await _controller.takePicture();
-                            bloc.add(TakePictureEvent(
-                              path: image.path,
-                              userId: getAppBlocState().currentUser.id,
-                              jwt: getAppBlocState().currentUser.jwt,
-                            ));
-                          } else if (await Permission.storage.status.isDenied) {
-                            await Permission.storage.request();
-                          }
+                          _animationController.reset();
+                          _animationController.forward();
+                          final image = await _controller.takePicture();
+                          bloc.add(TakePictureEvent(
+                            path: image.path,
+                            userId: getAppBlocState().currentUser.id,
+                            jwt: getAppBlocState().currentUser.jwt,
+                          ));
+
+                          // if (await Permission.storage.status.isGranted) {
+                          // } else if (await Permission.storage.status.isDenied) {
+                          //   await Permission.storage.request();
+                          // }
                         }
                       },
                       icon: Icons.camera_alt,
