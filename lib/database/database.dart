@@ -6,17 +6,15 @@ import 'package:sqflite/sqflite.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 
 Future<void> initDatabase() async {
-  List<dynamic> modelSQLClass = [Picture, DeleteItem, CachedJWT];
-
   Constants.database = await openDatabase(
     join(
       await getDatabasesPath(),
       'camera_app.db',
     ),
-    onCreate: (db, version) {
-      return modelSQLClass.forEach(
-        (model) async => await db.execute(model.onCreate()),
-      );
+    onCreate: (db, version) async {
+      await db.execute(Picture.onCreate());
+      await db.execute(DeleteItem.onCreate());
+      await db.execute(CachedJWT.onCreate());
     },
     version: 1,
   );
