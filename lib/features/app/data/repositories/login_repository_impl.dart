@@ -13,16 +13,18 @@ class LoginRepositoryImplement implements LoginRepository {
   final LocalLoginDatasource localLoginDatasource;
   final NetworkInfo networkInfo;
 
-  LoginRepositoryImplement(
-      {@required this.remoteLoginDatasource,
-      @required this.localLoginDatasource,
-      @required this.networkInfo});
+  LoginRepositoryImplement({
+    @required this.remoteLoginDatasource,
+    @required this.localLoginDatasource,
+    @required this.networkInfo,
+  });
 
   Future<Either<Failure, User>> login(String username, String password) async {
     try {
       if (await networkInfo.isConnected) {
         final user = await remoteLoginDatasource.login(username, password);
         await localLoginDatasource.cacheUser(user);
+        await localLoginDatasource.cachedJwt(user);
         return Right(user);
       }
       throw LoginException();

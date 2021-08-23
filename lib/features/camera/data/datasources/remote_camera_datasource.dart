@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:my_camera_app_demo/cores/exceptions/exception.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/camera/data/models/picture_model.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 
 abstract class RemoteCameraDatasource {
@@ -10,12 +9,8 @@ abstract class RemoteCameraDatasource {
 }
 
 class RemoteCameraDatasourceImpl implements RemoteCameraDatasource {
-  final Database database;
   final http.Client client;
-  RemoteCameraDatasourceImpl({
-    @required this.database,
-    @required this.client,
-  });
+  RemoteCameraDatasourceImpl({@required this.client});
 
   @override
   Future<void> sendPicture(String jwt, PictureModel model) async {

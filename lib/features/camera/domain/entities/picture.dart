@@ -29,5 +29,11 @@ class Picture extends Equatable {
   }
 
   @override
-  List<Object> get props => <dynamic>[id, serverId, data, lastModifyTime];
+  List<Object> get props => <dynamic>[
+        id,
+        userId,
+        serverId,
+        data,
+        lastModifyTime,
+      ];
 }
