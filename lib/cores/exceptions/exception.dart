@@ -28,3 +28,8 @@ class RemoveAccountException implements Exception {
   final int statusCode;
   RemoveAccountException({@required this.statusCode});
 }
+
+class AnalysisPictureException implements Exception {
+  final int statusCode;
+  AnalysisPictureException({@required this.statusCode});
+}

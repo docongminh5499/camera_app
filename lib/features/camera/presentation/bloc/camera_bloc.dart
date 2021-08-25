@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:my_camera_app_demo/cores/failures/failure.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/camera/domain/usecases/params.dart';
 import 'package:my_camera_app_demo/features/camera/domain/usecases/save_picture.dart';

@@ -40,3 +40,10 @@ class GetFileFailure extends Failure {}
 class DeleteFailure extends Failure {}
 
 class SavePictureFailure extends Failure {}
+
+class AnalysisPictureFailure extends Failure {
+  final int statusCode;
+  AnalysisPictureFailure({@required this.statusCode});
+  @override
+  List<Object> get props => <dynamic>[statusCode];
+}

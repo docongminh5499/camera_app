@@ -7,7 +7,7 @@ import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart'
 import 'package:my_camera_app_demo/features/camera/presentation/bloc/camera_bloc.dart';
 import 'package:my_camera_app_demo/features/camera/presentation/widgets/my_button_icon.dart';
 import 'package:my_camera_app_demo/injections/injection.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 class CameraPage extends StatefulWidget {
   CameraPage({Key key}) : super(key: key);
@@ -77,8 +77,10 @@ class _CameraPageState extends State<CameraPage>
 
   selectCamera() async {
     var controller = CameraController(
-        _cameras[_selected], ResolutionPreset.high,
-        imageFormatGroup: ImageFormatGroup.yuv420);
+      _cameras[_selected],
+      ResolutionPreset.medium,
+      imageFormatGroup: ImageFormatGroup.yuv420,
+    );
     await controller.initialize();
     return controller;
   }
