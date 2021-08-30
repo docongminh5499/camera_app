@@ -4,6 +4,7 @@ import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/account/domain/entities/account.dart';
 import 'package:my_camera_app_demo/features/account/presentation/pages/modify_account.dart';
+import 'package:my_camera_app_demo/features/account/presentation/pages/send_notification.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 
 class AccountItem extends StatefulWidget {
@@ -82,6 +83,16 @@ class _AccountItemState extends State<AccountItem> {
               itemBuilder: (context) => ([
                 PopupMenuItem(
                     child: Row(children: <Widget>[
+                      Icon(Icons.circle_notifications, color: Colors.orange),
+                      Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            localizations.translate('notification'),
+                          ))
+                    ]),
+                    value: 2),
+                PopupMenuItem(
+                    child: Row(children: <Widget>[
                       Icon(Icons.create, color: Colors.blue),
                       Padding(
                           padding: EdgeInsets.only(left: 5),
@@ -157,6 +168,17 @@ class _AccountItemState extends State<AccountItem> {
                           ],
                         );
                       },
+                    );
+                    break;
+                  case 2:
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SendNotificationPage(
+                          themeColor: widget.themeColor,
+                          receiver: widget.account,
+                        ),
+                      ),
                     );
                     break;
                 }

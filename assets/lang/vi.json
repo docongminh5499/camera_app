@@ -55,5 +55,9 @@
     "takePictureError": "Xảy ra lỗi, vui lòng thử lại",
     "gallery": "Bộ sưu tập",
     "subTextGallery": "Xem danh sách hình ảnh đã chụp",
-    "galleryEmpty": "Bạn chưa chụp hình nào"
+    "galleryEmpty": "Bạn chưa chụp hình nào",
+    "notification": "Gửi thông báo",
+    "content": "Nội dung thông báo",
+    "receiver": "Gửi tới",
+    "sendNotificationError": "Xảy ra lỗi, vui lòng thử lại"
 }

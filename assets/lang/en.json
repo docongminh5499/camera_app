@@ -55,5 +55,9 @@
     "takePictureError": "Something went wrong. Please try again.",
     "gallery": "Gallery",
     "subTextGallery": "Review your collections of picture",
-    "galleryEmpty": "You haven't take any picture yet"
+    "galleryEmpty": "You haven't take any picture yet",
+    "notification": "Send notification",
+    "content": "Notification content",
+    "receiver": "Send to",
+    "sendNotificationError": "Something went wrong. Please try again."
 }

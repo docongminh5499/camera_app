@@ -48,3 +48,17 @@ class RemoveAccountParams extends Equatable {
   @override
   List<Object> get props => <dynamic>[jwt, id];
 }
+
+class SendNotificationParams extends Equatable {
+  final String jwt;
+  final String receiverId;
+  final String message;
+
+  SendNotificationParams({
+    @required this.jwt,
+    @required this.receiverId,
+    @required this.message,
+  });
+  @override
+  List<Object> get props => <dynamic>[jwt, receiverId, message];
+}

@@ -71,4 +71,18 @@ class AccountRepositoryImpl implements AccountRepository {
       return Left(RemoveAccountFailure(statusCode: error.statusCode));
     }
   }
+
+  @override
+  Future<bool> sendNotification(
+    String jwt,
+    String receiverId,
+    String message,
+  ) async {
+    try {
+      await remoteAccountDatasource.sendNotification(jwt, receiverId, message);
+      return true;
+    } on SendNotificationException {
+      return false;
+    }
+  }
 }

@@ -13,6 +13,7 @@ abstract class RemoteAccountDatasource {
   Future<AccountModel> modifyAccount(
       String jwt, String id, String username, bool admin);
   Future<AccountModel> removeAccount(String jwt, String id);
+  Future<void> sendNotification(String jwt, String receiverId, String message);
 }
 
 class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
@@ -94,5 +95,22 @@ class RemoteAccountDatasourceImpl implements RemoteAccountDatasource {
       return AccountModel.fromJson(json.decode(response.body));
     } else
       throw RemoveAccountException(statusCode: response.statusCode);
+  }
+
+  @override
+  Future<void> sendNotification(
+      String jwt, String receiverId, String message) async {
+    final response = await client.post(
+      Uri.parse(Constants.urls['sendNotification']),
+      body: {
+        'token': jwt,
+        'receiverId': receiverId,
+        'message': message,
+      },
+    ).timeout(
+      Duration(seconds: Constants.timeoutSecond),
+      onTimeout: () => http.Response('Error', 500),
+    );
+    if (!(response.statusCode == 200)) throw SendNotificationException();
   }
 }

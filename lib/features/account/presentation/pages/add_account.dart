@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/cores/widgets/decorate_title_scaffold.dart';
-import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc.dart';
+import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/injections/injection.dart';
 

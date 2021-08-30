@@ -20,4 +20,10 @@ abstract class AccountRepository {
     String jwt,
     String id,
   );
+
+  Future<bool> sendNotification(
+    String jwt,
+    String receiverId,
+    String message,
+  );
 }

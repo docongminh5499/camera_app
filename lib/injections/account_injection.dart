@@ -6,7 +6,9 @@ import 'package:my_camera_app_demo/features/account/domain/usecases/add_account.
 import 'package:my_camera_app_demo/features/account/domain/usecases/get_list_account.dart';
 import 'package:my_camera_app_demo/features/account/domain/usecases/modify_account.dart';
 import 'package:my_camera_app_demo/features/account/domain/usecases/remove_account.dart';
-import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc.dart';
+import 'package:my_camera_app_demo/features/account/domain/usecases/send_notification.dart';
+import 'package:my_camera_app_demo/features/account/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:my_camera_app_demo/features/account/presentation/bloc/notification_bloc/notification_bloc.dart';
 
 void init(GetIt sl) {
   // * BLOC
@@ -16,11 +18,15 @@ void init(GetIt sl) {
         modifyAccountUsecase: sl(),
         removeAccountUsecase: sl(),
       ));
+  sl.registerFactory(() => NotificationBloc(
+        sendNotificationUsecase: sl(),
+      ));
   // * USECASE
   sl.registerLazySingleton(() => GetListAccountUsecase(repository: sl()));
   sl.registerLazySingleton(() => AddAccountUsecase(accountRepository: sl()));
   sl.registerLazySingleton(() => ModifyAccountUsecase(accountRepository: sl()));
   sl.registerLazySingleton(() => RemoveAccountUsecase(accountRepository: sl()));
+  sl.registerLazySingleton(() => SendNotificationUsecase(repository: sl()));
   // * REPOSITORY
   sl.registerLazySingleton<AccountRepository>(() => AccountRepositoryImpl(
         remoteAccountDatasource: sl(),
