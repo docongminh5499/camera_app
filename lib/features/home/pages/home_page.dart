@@ -7,6 +7,7 @@ import 'package:my_camera_app_demo/features/account/presentation/pages/account_p
 import 'package:my_camera_app_demo/features/analysis/presentation/pages/analysis_page.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/features/camera/presentation/pages/camera_page.dart';
+import 'package:my_camera_app_demo/features/gallery/presentation/pages/gallery_page.dart';
 import 'package:my_camera_app_demo/features/home/bloc/home_bloc.dart';
 import 'package:my_camera_app_demo/features/home/widgets/my_container.dart';
 import 'package:my_camera_app_demo/features/setting/pages/setting.dart';
@@ -122,6 +123,24 @@ class _HomePageState extends State<HomePage> {
                         themeColor: getCurrentBlocState().setting.isDarkModeOn
                             ? Color(0xFF6C3C14)
                             : Color(0xFFE5924A),
+                      ),
+                    ),
+                  ),
+                ),
+                MyContainer(
+                  subText: localizations.translate('subTextGallery'),
+                  text: localizations.translate("gallery"),
+                  color: getCurrentBlocState().setting.isDarkModeOn
+                      ? Color(0xFF344860)
+                      : Color(0xFF95A5A5),
+                  icon: Icons.burst_mode,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GalleryPage(
+                        themeColor: getCurrentBlocState().setting.isDarkModeOn
+                            ? Color(0xFF344860)
+                            : Color(0xFF95A5A5),
                       ),
                     ),
                   ),

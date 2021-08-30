@@ -33,3 +33,5 @@ class AnalysisPictureException implements Exception {
   final int statusCode;
   AnalysisPictureException({@required this.statusCode});
 }
+
+class RemoteGalleryException implements Exception {}

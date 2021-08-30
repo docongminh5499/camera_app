@@ -1,46 +1,42 @@
 import 'package:flutter/cupertino.dart';
-import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
+import 'package:my_camera_app_demo/features/gallery/domain/entities/deleted_items.dart';
 
-class PictureModel extends Picture {
-  PictureModel({
-    int id,
-    String serverId,
+class DeletedItemModel extends DeleteItem {
+  DeletedItemModel({
+    @required int id,
+    @required String serverId,
     @required String userId,
-    @required String data,
-    @required DateTime lastModifyTime,
+    @required DateTime deletedTime,
   }) : super(
           id: id,
           serverId: serverId,
           userId: userId,
-          data: data,
-          lastModifyTime: lastModifyTime,
+          deletedTime: deletedTime,
         );
 
-  factory PictureModel.fromJson(Map<String, dynamic> json) {
+  factory DeletedItemModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] == 0
         || json['id'] == '0'
         || json['id'] == null
         || json['id'] == 'null')
       json['id'] = null;
-    print("Picture id ${json['id']}");
-    return PictureModel(
+
+    return DeletedItemModel(
       id: json['id'] == null ? null : int.parse(json['id'].toString()),
       serverId: json['serverId'],
       userId: json['userId'],
-      data: json['data'],
-      lastModifyTime: DateTime.parse(json['lastModifyTime']).toUtc(),
+      deletedTime: DateTime.parse(json['deletedTime']).toUtc(),
     );
   }
 
   Map<String, dynamic> toJson({bool notNull = false, parseString = false}) {
-    Map<String, dynamic> json = {
+    Map<String,dynamic> json =  {
       'id': this.id,
       'serverId': serverId,
       'userId': userId,
-      'data': data,
-      'lastModifyTime': lastModifyTime.toUtc().toString(),
+      'deletedTime': deletedTime.toUtc().toString(),
     };
-
+    
     if (json['id'] == 0) {
       json['id'] = null;
     }

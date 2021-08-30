@@ -47,3 +47,7 @@ class AnalysisPictureFailure extends Failure {
   @override
   List<Object> get props => <dynamic>[statusCode];
 }
+
+class RemoteGalleryFailure extends Failure {}
+
+class GetSyncTimeFailure extends Failure {}

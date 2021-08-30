@@ -23,8 +23,11 @@ class LoginRepositoryImplement implements LoginRepository {
     try {
       if (await networkInfo.isConnected) {
         final user = await remoteLoginDatasource.login(username, password);
-        await localLoginDatasource.cacheUser(user);
-        await localLoginDatasource.cachedJwt(user);
+        await Future.wait([
+          localLoginDatasource.cacheUser(user),
+          localLoginDatasource.cachedJwt(user),
+          localLoginDatasource.cachedSyncTime(),
+        ]);
         return Right(user);
       }
       throw LoginException();
@@ -35,11 +38,11 @@ class LoginRepositoryImplement implements LoginRepository {
 
   Future<Either<Failure, User>> autoLogin() async {
     try {
-        final user = await localLoginDatasource.getCachedUser();
-        return Right(user);
-        // final result = await remoteLoginDatasource.verifyJWT(user);
-        // if (result) return Right(user);
-        // throw CacheException();
+      final user = await localLoginDatasource.getCachedUser();
+      return Right(user);
+      // final result = await remoteLoginDatasource.verifyJWT(user);
+      // if (result) return Right(user);
+      // throw CacheException();
     } on CacheException {
       return Left(AutoLoginFailure());
     }

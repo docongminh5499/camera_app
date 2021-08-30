@@ -10,6 +10,7 @@ import 'camera_injection.dart' as camera;
 import 'home_injection.dart' as home;
 import 'account_injection.dart' as account;
 import 'analysis_picture.dart' as analysis;
+import 'gallery_injection.dart' as gallery;
 
 final sl = GetIt.instance;
 
@@ -26,6 +27,8 @@ Future<void> init() async {
   camera.init(sl);
   // ! Analysis Picture Init
   analysis.init(sl);
+  // ! Gallery Init
+  gallery.init(sl);
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   //! External

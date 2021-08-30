@@ -14,6 +14,7 @@ abstract class LocalLoginDatasource {
   Future<bool> cacheUser(UserModel model);
   Future<UserModel> getCachedUser();
   Future<CachedJWTModel> cachedJwt(UserModel model);
+  Future<void> cachedSyncTime();
 }
 
 class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
@@ -49,5 +50,17 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
     return CachedJWTModel(jwt: model.jwt, id: id, userId: model.id);
+  }
+
+  @override
+  Future<void> cachedSyncTime() async {
+    String syncTime = preferences.getString(Constants.cachedTimeSyncKey);
+    if (syncTime == null) {
+      DateTime now = DateTime.now();
+      await preferences.setString(
+        Constants.cachedTimeSyncKey,
+        now.toUtc().toString(),
+      );
+    }
   }
 }

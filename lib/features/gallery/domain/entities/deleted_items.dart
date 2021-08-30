@@ -2,13 +2,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 class DeleteItem extends Equatable {
-  final String id;
+  final int id;
   final String serverId;
+  final String userId;
   final DateTime deletedTime;
 
   DeleteItem({
-    this.id,
-    this.serverId,
+    @required this.id,
+    @required this.serverId,
+    @required this.userId,
     @required this.deletedTime,
   });
 
@@ -19,11 +21,12 @@ class DeleteItem extends Equatable {
         DeleteItem.table +
         """ (
       id INTEGER PRIMARY KEY, 
-      serverId TEXT,
+      serverId TEXT NOT NULL,
+      userId TEXT NOT NULL,
       deletedTime DATETIME NOT NULL
     )""";
   }
 
   @override
-  List<Object> get props => <dynamic>[id, serverId, deletedTime];
+  List<Object> get props => <dynamic>[id, userId, serverId, deletedTime];
 }

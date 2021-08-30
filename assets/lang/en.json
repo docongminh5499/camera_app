@@ -52,5 +52,8 @@
     "analysisSuccess": "Analysis successfully",
     "result": "Result",
     "welcomeBack": "Welcome back!",
-    "takePictureError": "Something went wrong. Please try again."
+    "takePictureError": "Something went wrong. Please try again.",
+    "gallery": "Gallery",
+    "subTextGallery": "Review your collections of picture",
+    "galleryEmpty": "You haven't take any picture yet"
 }

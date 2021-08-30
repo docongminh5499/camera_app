@@ -17,7 +17,7 @@ class Constants {
       new GlobalKey<NavigatorState>();
 
   static String protocol = "http";
-  static String server = "192.168.1.124:3000";
+  static String server = "192.168.1.123:3000";
   // static String server = "docongminh-camera-app-server.herokuapp.com";
 
   static Map<String, String> urls = {
@@ -29,6 +29,11 @@ class Constants {
     "removeAccount": "$protocol://$server/remove-account",
     "analysisImage": "$protocol://$server/analysis-image",
     "saveImage": "$protocol://$server/save-image",
+    "syncCreate": "$protocol://$server/sync-create",
+    "syncDelete": "$protocol://$server/sync-delete",
+    "requireSyncCreate": "$protocol://$server/require-sync-create",
+    "requireSyncDelete": "$protocol://$server/require-sync-delete",
+    "getPicture": "$protocol://$server/get-picture"
   };
 
   static List<Map<String, dynamic>> locales = [
@@ -39,4 +44,5 @@ class Constants {
   static Database database;
   static int timeoutSecond = 15;
   static AppLocalizations localizations;
+  static int limitPicturePerRequest = 4;
 }

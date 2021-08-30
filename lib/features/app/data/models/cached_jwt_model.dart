@@ -16,13 +16,14 @@ class CachedJWTModel extends CachedJWT {
     );
   }
 
-  Map<String, dynamic> toJson({bool notNull = false}) {
+  Map<String, dynamic> toJson({bool notNull = false, parseString = false}) {
     Map<String, dynamic> json = {
       'id': id,
       'userId': userId,
       'jwt': jwt,
     };
     if (notNull) json.removeWhere((key, value) => value == null);
+    if (parseString) json['id'] = json['id'].toString();
     return json;
   }
 }

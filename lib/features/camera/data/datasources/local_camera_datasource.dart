@@ -19,7 +19,7 @@ class LocalCameraDatasourceImpl implements LocalCameraDatasource {
   Future<int> savePicture(PictureModel model) async {
     return await database.insert(
       Picture.table,
-      model.toJson(),
+      model.toJson(notNull: true),
       conflictAlgorithm: ConflictAlgorithm.abort,
     );
   }
