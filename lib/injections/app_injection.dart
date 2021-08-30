@@ -37,9 +37,11 @@ void init(GetIt sl) {
   sl.registerLazySingleton<SettingRepository>(
       () => SettingRepositoryImplementation(dataSource: sl()));
   sl.registerLazySingleton<LoginRepository>(() => LoginRepositoryImplement(
-      remoteLoginDatasource: sl(),
-      localLoginDatasource: sl(),
-      networkInfo: sl()));
+        remoteLoginDatasource: sl(),
+        localLoginDatasource: sl(),
+        networkInfo: sl(),
+        firebaseHandler: sl(),
+      ));
   // * DATA SOURCE
   sl.registerLazySingleton<LocalSettingDataSource>(
       () => LocalSettingDataSourceImplementation(preferences: sl()));

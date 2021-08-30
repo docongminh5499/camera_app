@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_camera_app_demo/cores/network/network_info.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
+import 'package:my_camera_app_demo/cores/utils/firebase_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_injection.dart' as login;
 import 'app_injection.dart' as app;
@@ -31,6 +32,12 @@ Future<void> init() async {
   gallery.init(sl);
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton(
+    () => FirebaseHandler(
+      preferences: sl(),
+      client: sl(),
+    ),
+  );
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);

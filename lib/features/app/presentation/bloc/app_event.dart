@@ -27,7 +27,12 @@ class LoginSuccessfulEvent extends AppEvent {
   List<Object> get props => <dynamic>[user];
 }
 
-class LogoutEvent extends AppEvent {}
+class LogoutEvent extends AppEvent {
+  final String jwt;
+  LogoutEvent({@required this.jwt});
+  @override
+  List<Object> get props => <dynamic>[jwt];
+}
 
 class ChangeDarkModeEvent extends AppEvent {
   final bool turnOn;

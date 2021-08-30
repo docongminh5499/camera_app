@@ -37,3 +37,10 @@ class SettingParams extends Equatable {
   @override
   List<Object> get props => <dynamic>[languageCode, countryCode, turnOn];
 }
+
+class LogoutParams extends Equatable {
+  final String jwt;
+  LogoutParams({@required this.jwt});
+  @override
+  List<Object> get props => <dynamic>[jwt];
+}

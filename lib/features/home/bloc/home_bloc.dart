@@ -14,9 +14,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     if (event is PrepareLogoutEvent) {
+      LoggedInState state = appBloc.state;
       yield PrepareLogoutState();
       Future.delayed(Duration(milliseconds: 500), () {
-        appBloc.add(LogoutEvent());
+        appBloc.add(LogoutEvent(jwt: state.currentUser.jwt));
       });
     }
   }

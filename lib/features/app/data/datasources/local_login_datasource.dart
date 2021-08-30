@@ -10,11 +10,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class LocalLoginDatasource {
+  Future<bool> clearFirebaseKey();
   Future<bool> logout();
   Future<bool> cacheUser(UserModel model);
   Future<UserModel> getCachedUser();
   Future<CachedJWTModel> cachedJwt(UserModel model);
   Future<void> cachedSyncTime();
+  Future<String> getCachedFirebaseToken();
 }
 
 class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
@@ -26,22 +28,26 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
     @required this.database,
   });
 
+  @override
   Future<bool> logout() async {
     bool result = await preferences.remove(Constants.cacheUserKey);
     return result;
   }
 
+  @override
   Future<bool> cacheUser(UserModel model) {
     return preferences.setString(
         Constants.cacheUserKey, json.encode(model.toJson()));
   }
 
+  @override
   Future<UserModel> getCachedUser() async {
     final user = preferences.getString(Constants.cacheUserKey);
     if (user != null) return UserModel.fromJson(json.decode(user));
     throw CacheException();
   }
 
+  @override
   Future<CachedJWTModel> cachedJwt(UserModel model) async {
     CachedJWTModel jwt = CachedJWTModel(jwt: model.jwt, userId: model.id);
     final id = await database.insert(
@@ -62,5 +68,15 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
         now.toUtc().toString(),
       );
     }
+  }
+
+  @override
+  Future<bool> clearFirebaseKey() {
+    return preferences.remove(Constants.firebaseKey);
+  }
+
+  @override
+  Future<String> getCachedFirebaseToken() async {
+    return preferences.getString(Constants.firebaseKey);
   }
 }

@@ -17,16 +17,19 @@ class LocalSettingDataSourceImplementation implements LocalSettingDataSource {
 
   LocalSettingDataSourceImplementation({@required this.preferences});
 
+  @override
   Future<bool> clearSetting() {
     return preferences.remove(Constants.cacheSettingKey);
   }
 
+  @override
   Future<SettingModel> getCachedSetting(String key) async {
     final setting = preferences.getString(key);
     if (setting != null) return SettingModel.fromJson(json.decode(setting));
     throw CacheException();
   }
 
+  @override
   Future<bool> cachedSetting(String key, SettingModel model) {
     return preferences.setString(key, json.encode(model.toJson()));
   }

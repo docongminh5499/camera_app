@@ -9,6 +9,7 @@ class Constants {
   static String cacheSettingKey = "CACHE_SETTING_KEY";
   static String cacheDefaultSettingKey = "CACHE_DEFAULT_SETTING_KEY";
   static String cachedTimeSyncKey = "CACHE_TIME_SYNC_KEY";
+  static String firebaseKey = "FIREBASE_TOKEN_KEY";
 
   static String appName = "Camera App";
   static bool defaultDarkmodeOn = false;
@@ -33,7 +34,13 @@ class Constants {
     "syncDelete": "$protocol://$server/sync-delete",
     "requireSyncCreate": "$protocol://$server/require-sync-create",
     "requireSyncDelete": "$protocol://$server/require-sync-delete",
-    "getPicture": "$protocol://$server/get-picture"
+    "getPicture": "$protocol://$server/get-picture",
+    "registerFirebaseToken": "$protocol://$server/register-firebase-token",
+    "removeFirebaseToken": "$protocol://$server/remove-firebase-token",
+    "sendNotification": "$protocol://$server/send-notification",
+    "readNotification": "$protocol://$server/read-notification",
+    "checkUnreadNotification": "$protocol://$server/check-unread-notification",
+    "getNotification": "$protocol://$server/get-notification"
   };
 
   static List<Map<String, dynamic>> locales = [
