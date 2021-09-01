@@ -59,5 +59,6 @@
     "notification": "Gửi thông báo",
     "content": "Nội dung thông báo",
     "receiver": "Gửi tới",
-    "sendNotificationError": "Xảy ra lỗi, vui lòng thử lại"
+    "sendNotificationError": "Xảy ra lỗi, vui lòng thử lại",
+    "notificationTitle": "Thông báo"
 }

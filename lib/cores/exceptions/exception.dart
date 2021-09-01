@@ -37,3 +37,7 @@ class AnalysisPictureException implements Exception {
 class RemoteGalleryException implements Exception {}
 
 class SendNotificationException implements Exception {}
+
+class GetUnopenNotificationException implements Exception {}
+
+class OpenAlNotificationException implements Exception {}

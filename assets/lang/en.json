@@ -59,5 +59,6 @@
     "notification": "Send notification",
     "content": "Notification content",
     "receiver": "Send to",
-    "sendNotificationError": "Something went wrong. Please try again."
+    "sendNotificationError": "Something went wrong. Please try again.",
+    "notificationTitle": "Notification"
 }

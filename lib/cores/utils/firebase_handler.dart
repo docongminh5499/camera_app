@@ -6,7 +6,7 @@ import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/app/domain/entities/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class FirebaseHandler {
+class FirebaseHandler extends ChangeNotifier {
   FirebaseApp app;
   FirebaseMessaging messaging;
   NotificationSettings settings;
@@ -25,6 +25,8 @@ class FirebaseHandler {
 
   void getToken(User user) {
     messaging.getToken().then((token) async {
+      print("Firebase token: $token");
+
       String prevToken = preferences.getString(Constants.firebaseKey);
       if (prevToken == null) {
         await client.post(
@@ -79,6 +81,7 @@ class FirebaseHandler {
   }
 
   void firebaseConfig(User user) async {
+    print("Configuring firebase handler");
     // Initialize app
     await initialApp();
     messaging = FirebaseMessaging.instance;
@@ -106,15 +109,19 @@ class FirebaseHandler {
   }
 
   void attachMessageOpenAppListener() async {
+    print("Attaching event listener for firebase handler");
+
     await initialApp();
     // Listener for arriving message event
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("Opended app receiving message");
+      notifyListeners();
     });
     // On open app from message when app is in background state
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print("Background app receiving message");
     });
+
     // On open app from message when app is in terminated state
     RemoteMessage initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();

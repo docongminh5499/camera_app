@@ -39,8 +39,15 @@ class DecorateTitleScaffold extends StatelessWidget {
   final String title;
   final Widget body;
   final Color color;
-  const DecorateTitleScaffold({Key key, this.title, this.body, this.color})
-      : super(key: key);
+  final List<Widget> actionButtons;
+
+  const DecorateTitleScaffold({
+    Key key,
+    this.title,
+    this.body,
+    this.color,
+    this.actionButtons,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +62,7 @@ class DecorateTitleScaffold extends StatelessWidget {
             title: Text(title),
             centerTitle: true,
             backgroundColor: color,
+            actions: actionButtons,
           ),
           body: CustomPaint(
             painter: MyCustomPainter(context: context, color: color),

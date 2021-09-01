@@ -39,8 +39,9 @@ class Constants {
     "removeFirebaseToken": "$protocol://$server/remove-firebase-token",
     "sendNotification": "$protocol://$server/send-notification",
     "readNotification": "$protocol://$server/read-notification",
-    "checkUnreadNotification": "$protocol://$server/check-unread-notification",
-    "getNotification": "$protocol://$server/get-notification"
+    "checkUnopenNotification": "$protocol://$server/check-unopen-notification",
+    "getNotification": "$protocol://$server/get-notification",
+    "openAllNotification": "$protocol://$server/open-all-notification"
   };
 
   static List<Map<String, dynamic>> locales = [
@@ -52,4 +53,5 @@ class Constants {
   static int timeoutSecond = 15;
   static AppLocalizations localizations;
   static int limitPicturePerRequest = 4;
+  static int limitNotificationPerRequest = 10;
 }

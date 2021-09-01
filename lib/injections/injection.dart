@@ -12,6 +12,7 @@ import 'home_injection.dart' as home;
 import 'account_injection.dart' as account;
 import 'analysis_picture.dart' as analysis;
 import 'gallery_injection.dart' as gallery;
+import 'notification_injection.dart' as notification;
 
 final sl = GetIt.instance;
 
@@ -30,6 +31,8 @@ Future<void> init() async {
   analysis.init(sl);
   // ! Gallery Init
   gallery.init(sl);
+  // ! Notification Init
+  notification.init(sl);
   //! Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   sl.registerLazySingleton(

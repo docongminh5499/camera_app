@@ -10,6 +10,7 @@ import 'package:my_camera_app_demo/features/camera/presentation/pages/camera_pag
 import 'package:my_camera_app_demo/features/gallery/presentation/pages/gallery_page.dart';
 import 'package:my_camera_app_demo/features/home/bloc/home_bloc.dart';
 import 'package:my_camera_app_demo/features/home/widgets/my_container.dart';
+import 'package:my_camera_app_demo/features/notification/presentation/widgets/notification_button.dart';
 import 'package:my_camera_app_demo/features/setting/pages/setting.dart';
 import 'package:my_camera_app_demo/injections/injection.dart';
 
@@ -41,11 +42,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     AppLocalizations localizations = AppLocalizations.of(context);
     Constants.localizations = localizations;
-    
+
     return BlocProvider(
       create: (BuildContext context) => bloc,
       child: DecorateTitleScaffold(
         title: localizations.translate('homeTitle'),
+        actionButtons: [
+          NotificationButton(
+            themeColor: Theme.of(context).primaryColor,
+          ),
+        ],
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (BuildContext context, HomeState state) {
             if (state is PrepareLogoutState) {
