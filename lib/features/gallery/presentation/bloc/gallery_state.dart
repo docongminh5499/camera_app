@@ -41,15 +41,17 @@ class GalleryContinueError extends GalleryState {}
 class GalleryRefreshing extends GalleryState {}
 
 class GalleryRefreshed extends GalleryState {
+  final int id;
   final List<Picture> items;
   final bool endOfList;
 
   GalleryRefreshed({
+    @required this.id,
     @required this.items,
     @required this.endOfList,
   });
   @override
-  List<Object> get props => <dynamic>[items, endOfList];
+  List<Object> get props => <dynamic>[id, items, endOfList];
 }
 
 class GalleryRefreshError extends GalleryState {}

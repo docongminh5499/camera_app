@@ -51,3 +51,5 @@ class AnalysisPictureFailure extends Failure {
 class RemoteGalleryFailure extends Failure {}
 
 class GetSyncTimeFailure extends Failure {}
+
+class GetNotificationFailure extends Failure {}

@@ -60,5 +60,8 @@
     "content": "Notification content",
     "receiver": "Send to",
     "sendNotificationError": "Something went wrong. Please try again.",
-    "notificationTitle": "Notification"
+    "notificationTitle": "Notification",
+    "getNotificationError": "Something went wrong. Please try again.",
+    "notificationEmpty": "You haven't received any notification yet.",
+    "sendYou": "has send you a notification"
 }

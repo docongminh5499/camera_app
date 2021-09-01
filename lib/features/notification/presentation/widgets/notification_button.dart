@@ -18,7 +18,8 @@ class NotificationButton extends StatefulWidget {
   _NotificationButtonState createState() => _NotificationButtonState();
 }
 
-class _NotificationButtonState extends State<NotificationButton> {
+class _NotificationButtonState extends State<NotificationButton>
+    with WidgetsBindingObserver {
   FirebaseHandler firebaseHandler;
   NotificationButtonBloc bloc;
   int numberOfNotification;
@@ -34,13 +35,23 @@ class _NotificationButtonState extends State<NotificationButton> {
     return numberOfNotification.toString();
   }
 
+  void onRefreshNotificationPage() {
+    print("Update notification button");
+    bloc.add(OpenAllNotificationEvent(
+      jwt: gerAppBlocState().currentUser.jwt,
+    ));
+  }
+
   void onPressButtonHandler() {
-     bloc.add(OpenAllNotificationEvent(
+    bloc.add(OpenAllNotificationEvent(
       jwt: gerAppBlocState().currentUser.jwt,
     ));
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => NotificationPage(themeColor: widget.themeColor),
+        builder: (context) => NotificationPage(
+          themeColor: widget.themeColor,
+          parentRefresh: onRefreshNotificationPage,
+        ),
       ),
     );
   }
@@ -61,13 +72,23 @@ class _NotificationButtonState extends State<NotificationButton> {
     bloc = sl<NotificationButtonBloc>();
     numberOfNotification = 0;
     firebaseHandler.addListener(onReceiveNotification);
+    WidgetsBinding.instance.addObserver(this);
     onReceiveNotification();
   }
 
   @override
   void dispose() {
     firebaseHandler.removeListener(onReceiveNotification);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      onReceiveNotification();
+    }
   }
 
   @override

@@ -59,6 +59,8 @@ class FirebaseHandler extends ChangeNotifier {
 
   void onTokenRefresh(User user) {
     messaging.onTokenRefresh.listen((token) async {
+      print("Refresh firebase token: $token");
+
       String prevToken = preferences.getString(Constants.firebaseKey);
       if (prevToken != null) {
         await client.post(

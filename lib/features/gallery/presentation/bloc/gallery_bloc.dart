@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -64,9 +65,11 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         limit: event.limit,
         skip: 0,
       ));
+      Random random = new Random();
       yield result.fold(
         (failure) => GalleryRefreshError(),
         (pictures) => GalleryRefreshed(
+          id: random.nextInt(100),
           items: pictures,
           endOfList: pictures.length < Constants.limitPicturePerRequest,
         ),

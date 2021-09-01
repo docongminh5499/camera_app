@@ -41,3 +41,5 @@ class SendNotificationException implements Exception {}
 class GetUnopenNotificationException implements Exception {}
 
 class OpenAlNotificationException implements Exception {}
+
+class GetNotificationException implements Exception {}
