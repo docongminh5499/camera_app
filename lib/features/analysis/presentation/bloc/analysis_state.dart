@@ -11,10 +11,10 @@ class AnalysisInitial extends AnalysisState {}
 class AnalysisLoadingPicture extends AnalysisState {}
 
 class AnalysisLoadedPicture extends AnalysisState {
-  final File file;
-  AnalysisLoadedPicture({@required this.file});
+  final String fileBase64;
+  AnalysisLoadedPicture({@required this.fileBase64});
   @override
-  List<Object> get props => <dynamic>[file];
+  List<Object> get props => <dynamic>[fileBase64];
 }
 
 class AnalysisingPicture extends AnalysisState {}

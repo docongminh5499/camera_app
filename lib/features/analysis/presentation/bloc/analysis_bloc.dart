@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -16,7 +17,12 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
   Stream<AnalysisState> mapEventToState(AnalysisEvent event) async* {
     if (event is ChoosePictureEvent) {
       yield AnalysisLoadingPicture();
-      yield AnalysisLoadedPicture(file: event.file);
+      final bytesList = await event.file.readAsBytes();
+      final fileBase64 = base64Encode(bytesList);
+      yield AnalysisLoadedPicture(fileBase64: fileBase64);
+    } else if (event is ChoosePictureFromGalleryEvent) {
+      yield AnalysisLoadingPicture();
+      yield AnalysisLoadedPicture(fileBase64: event.fileBase64);
     } else if (event is AnalysisPictureEvent) {
       yield AnalysisingPicture();
       final result = await usecase(AnalysisPictureParams(

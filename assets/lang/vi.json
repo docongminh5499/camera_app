@@ -67,7 +67,9 @@
     "newNotification": "Thông báo mới",
     "subNewNotification": "Bạn vừa có thông báo mới",
     "selectedItem": "hình đã chọn",
-    "export": "Xuất" ,
+    "export": "Xuất",
     "exportConfirm": "Bạn muốn xuất các hình đã chọn ra ngoài bộ nhớ điện thoại?",
-    "deleteConfirm": "Bạn muốn xóa các hình đã chọn?"
+    "deleteConfirm": "Bạn muốn xóa các hình đã chọn?",
+    "fromPhone": "Từ điện thoại",
+    "fromGallery": "Từ bộ sưu tập"
 }

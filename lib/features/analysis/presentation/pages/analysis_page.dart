@@ -12,6 +12,7 @@ import 'package:my_camera_app_demo/features/analysis/presentation/bloc/analysis_
 import 'package:my_camera_app_demo/features/analysis/presentation/pages/result_page.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/features/camera/presentation/pages/camera_page.dart';
+import 'package:my_camera_app_demo/features/gallery/presentation/pages/choose_gallery_page.dart';
 import 'package:my_camera_app_demo/injections/injection.dart';
 
 class AnalysisPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class AnalysisPage extends StatefulWidget {
 }
 
 class _AnalysisPageState extends State<AnalysisPage> {
-  File image;
+  String imageBase64;
   AnalysisBloc bloc = sl<AnalysisBloc>();
   bool popUp = false;
 
@@ -42,16 +43,31 @@ class _AnalysisPageState extends State<AnalysisPage> {
       source: ImageSource.gallery,
       imageQuality: 50,
     );
-    bloc.add(ChoosePictureEvent(file: File(_file.path)));
+    if (_file != null) bloc.add(ChoosePictureEvent(file: File(_file.path)));
+  }
+
+  void onChooseGallery() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChooseGalleryPage(
+          themeColor: getAppBlocState().setting.isDarkModeOn
+              ? Color(0xFF344860)
+              : Color(0xFF95A5A5),
+        ),
+      ),
+    );
+    if (result != null)
+      bloc.add(ChoosePictureFromGalleryEvent(fileBase64: result.data));
   }
 
   void onAnalysisPicture() async {
     AppLocalizations localizations = Constants.localizations;
-    if (image != null) {
+    if (imageBase64 != null) {
       bloc.add(AnalysisPictureEvent(
         jwt: getAppBlocState().currentUser.jwt,
         userId: getAppBlocState().currentUser.id,
-        data: base64Encode(await image.readAsBytes()),
+        data: imageBase64,
         analysisTime: DateTime.now().toUtc(),
       ));
     } else {
@@ -103,7 +119,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 }
 
                 if (state is AnalysisLoadedPicture) {
-                  image = state.file;
+                  imageBase64 = state.fileBase64;
                 } else if (state is AnalysisingPicture) {
                   showDialog<void>(
                     context: context,
@@ -178,7 +194,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
                         children: [CircularProgressIndicator()],
                       );
                     }
-                    return Image.file(image);
+                    return Image.memory(
+                      base64Decode(imageBase64),
+                      gaplessPlayback: true,
+                    );
                   },
                 ),
               ),
@@ -193,18 +212,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(widget.themeColor)),
-                  child: Text(localizations.translate('choosePicture')),
+                  child: Text(localizations.translate('fromPhone')),
                 ),
                 SizedBox(width: 15),
                 ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CameraPage()),
-                  ),
+                  onPressed: onChooseGallery,
                   style: ButtonStyle(
                       backgroundColor:
                           MaterialStateProperty.all<Color>(widget.themeColor)),
-                  child: Text(localizations.translate('openCamera')),
+                  child: Text(localizations.translate('fromGallery')),
                 ),
                 SizedBox(width: 15),
                 ElevatedButton(

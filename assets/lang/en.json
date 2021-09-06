@@ -67,7 +67,9 @@
     "newNotification": "New Notification",
     "subNewNotification": "You have received a notification",
     "selectedItem": "selected items",
-    "export": "Export" ,
+    "export": "Export",
     "exportConfirm": "Do you want to export selected pictures to phone gallery?",
-    "deleteConfirm": "Do you want to delete selected pictures?"
+    "deleteConfirm": "Do you want to delete selected pictures?",
+    "fromPhone": "From phone",
+    "fromGallery": "From gallery"
 }

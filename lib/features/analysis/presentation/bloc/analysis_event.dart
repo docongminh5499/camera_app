@@ -13,6 +13,13 @@ class ChoosePictureEvent extends AnalysisEvent {
   List<Object> get props => <dynamic>[file];
 }
 
+class ChoosePictureFromGalleryEvent extends AnalysisEvent {
+  final String fileBase64;
+  ChoosePictureFromGalleryEvent({@required this.fileBase64});
+  @override
+  List<Object> get props => <dynamic>[fileBase64];
+}
+
 class AnalysisPictureEvent extends AnalysisEvent {
   final String jwt;
   final String userId;
