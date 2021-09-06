@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:my_camera_app_demo/cores/exceptions/exception.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/camera/data/models/picture_model.dart';
@@ -9,6 +12,7 @@ import 'package:my_camera_app_demo/features/gallery/data/models/deleted_items_mo
 import 'package:my_camera_app_demo/features/gallery/domain/entities/deleted_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class LocalGalleryDatasource {
   DateTime getCurrentSyncTime();
@@ -30,6 +34,7 @@ abstract class LocalGalleryDatasource {
   Future<void> updateServerId(PictureModel model);
   Future<PictureModel> insertOrAbort(PictureModel model);
   Future<void> deleteDeletedItem(DeletedItemModel model);
+  Future<bool> exportPicture(PictureModel model);
 }
 
 class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
@@ -205,7 +210,7 @@ class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
 
   @override
   Future<void> updateServerId(PictureModel model) async {
-    final result =  await database.update(
+    final result = await database.update(
       Picture.table,
       {'serverId': model.serverId},
       where: "id = ?",
@@ -225,5 +230,18 @@ class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
       return PictureModel.fromJson(result[0]);
     else
       return savePicture(model);
+  }
+
+  @override
+  Future<bool> exportPicture(PictureModel model) async {
+    try {
+      Uint8List bytes = base64.decode(model.data);
+      String name = "camera_app_" + Uuid().v1();
+      await ImageGallerySaver.saveImage(bytes, name: name);
+      return true;
+    } catch (error, _) {
+      print("$error $_");
+      return false;
+    }
   }
 }

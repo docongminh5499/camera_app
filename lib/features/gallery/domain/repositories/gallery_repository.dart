@@ -10,4 +10,5 @@ abstract class GalleryRepository {
     int limit,
     int skip,
   );
+  Future<bool> exportPicture(List<Picture> pictures);
 }

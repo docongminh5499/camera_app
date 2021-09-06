@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
+import 'package:my_camera_app_demo/features/gallery/domain/usecases/export_picture_usecase.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/get_picture_usecase.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/param.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/send_sync_usecase.dart';
@@ -14,10 +15,12 @@ part 'gallery_state.dart';
 class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final SendSyncUsecase sendSyncUsecase;
   final GetPictureUsecase getPictureUsecase;
+  final ExportPictureUsecase exportPictureUsecase;
 
   GalleryBloc({
     @required this.sendSyncUsecase,
     @required this.getPictureUsecase,
+    @required this.exportPictureUsecase,
   }) : super(GalleryLoadingPicture());
   @override
   Stream<GalleryState> mapEventToState(GalleryEvent event) async* {
@@ -74,6 +77,12 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
           endOfList: pictures.length < Constants.limitPicturePerRequest,
         ),
       );
+    } else if (event is GalleryExportEvent) {
+      yield GalleryExporting();
+      await exportPictureUsecase(ExportPictureParams(
+        pictures: event.pictures,
+      ));
+      yield GalleryExported();
     }
   }
 }

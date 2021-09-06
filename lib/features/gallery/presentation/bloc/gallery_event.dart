@@ -52,3 +52,13 @@ class GalleryRefreshEvent extends GalleryEvent {
   @override
   List<Object> get props => <dynamic>[jwt, userId, limit];
 }
+
+class GalleryExportEvent extends GalleryEvent {
+  final List<Picture> pictures;
+  GalleryExportEvent({
+    @required this.pictures,
+  });
+
+  @override
+  List<Object> get props => <dynamic>[pictures];
+}

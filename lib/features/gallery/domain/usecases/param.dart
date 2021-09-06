@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
 
 class SendSyncParams extends Equatable {
   final String jwt;
@@ -28,4 +29,15 @@ class GetPictureParams extends Equatable {
 
   @override
   List<Object> get props => <dynamic>[jwt, userId, limit, skip];
+}
+
+class ExportPictureParams extends Equatable {
+  final List<Picture> pictures;
+
+  ExportPictureParams({
+    @required this.pictures,
+  });
+
+  @override
+  List<Object> get props => <dynamic>[pictures];
 }

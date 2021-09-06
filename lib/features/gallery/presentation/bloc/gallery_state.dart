@@ -55,3 +55,7 @@ class GalleryRefreshed extends GalleryState {
 }
 
 class GalleryRefreshError extends GalleryState {}
+
+class GalleryExporting extends GalleryState {}
+
+class GalleryExported extends GalleryState {}

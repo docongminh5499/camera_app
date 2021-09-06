@@ -9,6 +9,7 @@ import 'package:my_camera_app_demo/features/gallery/data/datasources/local_galle
 import 'package:my_camera_app_demo/features/gallery/data/datasources/remote_gallery_datasource.dart';
 import 'package:my_camera_app_demo/features/gallery/data/models/deleted_items_model.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/repositories/gallery_repository.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class GalleryRepositoryImpl implements GalleryRepository {
   final LocalGalleryDatasource localDatasource;
@@ -117,5 +118,24 @@ class GalleryRepositoryImpl implements GalleryRepository {
       }
     }
     return Right(await localDatasource.getPicture(userId, limit, skip));
+  }
+
+  @override
+  Future<bool> exportPicture(List<Picture> pictures) async {
+    if (await Permission.storage.status.isGranted) {
+      final result = await Future.wait(pictures.map((element) async {
+        return await localDatasource.exportPicture(element);
+      }));
+      return !result.any((element) => element == false);
+    } else if (await Permission.storage.status.isDenied) {
+      PermissionStatus result = await Permission.storage.request();
+      if (result == PermissionStatus.granted) {
+        final result = await Future.wait(pictures.map((element) async {
+          return await localDatasource.exportPicture(element);
+        }));
+        return !result.any((element) => element == false);
+      }
+    }
+    return false;
   }
 }

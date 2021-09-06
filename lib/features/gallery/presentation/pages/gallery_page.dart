@@ -77,19 +77,73 @@ class _GalleryPageState extends State<GalleryPage> with ChangeNotifier {
 
   void addImageFunc(Picture picture) {
     selectedItems.add(picture);
-    print("Length ${selectedItems.length}");
     this.setState(() {});
   }
 
   void removeImangeFunc(Picture picture) {
     selectedItems.remove(picture);
-    print("Length ${selectedItems.length}");
     this.setState(() {});
   }
 
   void onDeleteItems() {}
 
-  void onExportItems() {}
+  void onExportItems() {
+    AppLocalizations localizations = AppLocalizations.of(context);
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(localizations.translate('exportConfirm')),
+          actions: [
+            TextButton(
+              child: Text(
+                localizations.translate('cancel'),
+                style: TextStyle(
+                  color: getAppBlocState().setting.isDarkModeOn
+                      ? Color(0xFFBB6122)
+                      : Theme.of(context).primaryColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                localizations.translate('export'),
+                style: TextStyle(
+                  color: getAppBlocState().setting.isDarkModeOn
+                      ? Color(0xFFBB6122)
+                      : Theme.of(context).primaryColor,
+                ),
+              ),
+              onPressed: () {
+                bloc.add(GalleryExportEvent(pictures: selectedItems));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showLoadingDialog() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [CircularProgressIndicator()],
+          ),
+        );
+      },
+    );
+  }
 
   void onCancelItems() {
     this.setState(() {
@@ -159,6 +213,13 @@ class _GalleryPageState extends State<GalleryPage> with ChangeNotifier {
                 sent = false;
               } else if (state is GalleryContinueError) {
                 sent = false;
+              } else if (state is GalleryExporting) {
+                Navigator.of(context).pop();
+                showLoadingDialog();
+              } else if (state is GalleryExported) {
+                Navigator.of(context).pop();
+                selectedItems = [];
+                notifyListeners();
               }
             },
             child: BlocBuilder<GalleryBloc, GalleryState>(
