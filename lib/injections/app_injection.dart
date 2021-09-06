@@ -41,6 +41,7 @@ void init(GetIt sl) {
         localLoginDatasource: sl(),
         networkInfo: sl(),
         firebaseHandler: sl(),
+        galleryRepository: sl(),
       ));
   // * DATA SOURCE
   sl.registerLazySingleton<LocalSettingDataSource>(

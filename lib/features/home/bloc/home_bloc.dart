@@ -17,7 +17,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       LoggedInState state = appBloc.state;
       yield PrepareLogoutState();
       Future.delayed(Duration(milliseconds: 500), () {
-        appBloc.add(LogoutEvent(jwt: state.currentUser.jwt));
+        appBloc.add(LogoutEvent(
+          jwt: state.currentUser.jwt,
+          userId: state.currentUser.id,
+        ));
       });
     }
   }

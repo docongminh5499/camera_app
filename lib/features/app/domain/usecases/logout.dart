@@ -11,6 +11,6 @@ class LogoutUsecase extends Usecase<void, LogoutParams> {
 
   @override
   Future<Either<Failure, void>> call(LogoutParams params) async {
-    return await repository.logout(params.jwt);
+    return await repository.logout(params.jwt, params.userId);
   }
 }

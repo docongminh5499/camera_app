@@ -8,8 +8,10 @@ import 'package:my_camera_app_demo/features/app/data/datasources/local_login_dat
 import 'package:my_camera_app_demo/features/app/data/datasources/remote_login_datasource.dart';
 import 'package:my_camera_app_demo/features/app/domain/entities/user.dart';
 import 'package:my_camera_app_demo/features/app/domain/repositories/login_repository.dart';
+import 'package:my_camera_app_demo/features/gallery/domain/repositories/gallery_repository.dart';
 
 class LoginRepositoryImplement implements LoginRepository {
+  final GalleryRepository galleryRepository;
   final RemoteLoginDatasource remoteLoginDatasource;
   final LocalLoginDatasource localLoginDatasource;
   final NetworkInfo networkInfo;
@@ -20,6 +22,7 @@ class LoginRepositoryImplement implements LoginRepository {
     @required this.localLoginDatasource,
     @required this.networkInfo,
     @required this.firebaseHandler,
+    @required this.galleryRepository,
   });
 
   Future<Either<Failure, User>> login(String username, String password) async {
@@ -55,16 +58,25 @@ class LoginRepositoryImplement implements LoginRepository {
     }
   }
 
-  Future<Either<Failure, void>> logout(String jwt) async {
+  Future<Either<Failure, void>> logout(String jwt, String userId) async {
     try {
       final result = await localLoginDatasource.logout();
       if (result == false) return Left(LogoutFailure());
-
+      // Clear Firebase-Token
       String prevToken = await localLoginDatasource.getCachedFirebaseToken();
       if (prevToken != null) {
         await remoteLoginDatasource.removeFirebaseToken(jwt, prevToken);
         await localLoginDatasource.clearFirebaseKey();
       }
+      // Clear-Data
+      if (await networkInfo.isConnected) {
+        await galleryRepository.sendSync(jwt, userId);
+        await localLoginDatasource.clearAllData(jwt, userId);
+      } else {
+        await localLoginDatasource.clearSynedData(jwt, userId);
+      }
+      // Clear-Sync-Time
+      await localLoginDatasource.clearSyncTime();
       return Right(Unit);
     } catch (error, stack) {
       print("$error $stack");

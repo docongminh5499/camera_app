@@ -74,7 +74,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         currentUser: event.user,
       );
     } else if (event is LogoutEvent) {
-      await logoutUsecase(LogoutParams(jwt: event.jwt));
+      await logoutUsecase(LogoutParams(
+        jwt: event.jwt,
+        userId: event.userId,
+      ));
       //await clearSettingUsecase(NoParams());
       yield UnLoginState(
         setting: await getCachedSettingUsecase(NoParams()),

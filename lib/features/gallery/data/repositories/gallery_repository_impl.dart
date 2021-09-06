@@ -153,9 +153,13 @@ class GalleryRepositoryImpl implements GalleryRepository {
                 DateTime.now().toUtc(),
               );
             }
-            await localDatasource.deletePictureById(element.id);
+            if (element.id != null) {
+              await localDatasource.deletePictureById(element.id);
+            }
           } on RemoteGalleryException {
-            await localDatasource.deletePictureById(element.id);
+            if (element.id != null) {
+              await localDatasource.deletePictureById(element.id);
+            }
             if (element.serverId != null) {
               await localDatasource.addDeletedItem(
                 element.id,
@@ -166,7 +170,9 @@ class GalleryRepositoryImpl implements GalleryRepository {
             }
           }
         } else {
-          await localDatasource.deletePictureById(element.id);
+          if (element.id != null) {
+            await localDatasource.deletePictureById(element.id);
+          }
           if (element.serverId != null) {
             await localDatasource.addDeletedItem(
               element.id,
