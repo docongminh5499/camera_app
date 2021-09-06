@@ -41,3 +41,16 @@ class ExportPictureParams extends Equatable {
   @override
   List<Object> get props => <dynamic>[pictures];
 }
+
+class DeletePictureParams extends Equatable {
+  final List<Picture> pictures;
+  final String jwt;
+
+  DeletePictureParams({
+    @required this.jwt,
+    @required this.pictures,
+  });
+
+  @override
+  List<Object> get props => <dynamic>[jwt, pictures];
+}

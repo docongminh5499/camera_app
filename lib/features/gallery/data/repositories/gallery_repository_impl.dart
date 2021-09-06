@@ -138,4 +138,46 @@ class GalleryRepositoryImpl implements GalleryRepository {
     }
     return false;
   }
+
+  @override
+  Future<bool> deletePicture(String jwt, List<Picture> pictures) async {
+    await Future.wait(
+      pictures.map((element) async {
+        if (await networkInfo.isConnected) {
+          try {
+            if (element.serverId != null) {
+              await remoteDatasource.deletePicture(
+                jwt,
+                element.serverId,
+                element.userId,
+                DateTime.now().toUtc(),
+              );
+            }
+            await localDatasource.deletePictureById(element.id);
+          } on RemoteGalleryException {
+            await localDatasource.deletePictureById(element.id);
+            if (element.serverId != null) {
+              await localDatasource.addDeletedItem(
+                element.id,
+                element.serverId,
+                element.userId,
+                DateTime.now().toUtc(),
+              );
+            }
+          }
+        } else {
+          await localDatasource.deletePictureById(element.id);
+          if (element.serverId != null) {
+            await localDatasource.addDeletedItem(
+              element.id,
+              element.serverId,
+              element.userId,
+              DateTime.now().toUtc(),
+            );
+          }
+        }
+      }),
+    );
+    return true;
+  }
 }

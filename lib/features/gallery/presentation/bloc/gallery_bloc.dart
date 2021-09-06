@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
 import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
+import 'package:my_camera_app_demo/features/gallery/domain/usecases/delete_picture_usecase.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/export_picture_usecase.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/get_picture_usecase.dart';
 import 'package:my_camera_app_demo/features/gallery/domain/usecases/param.dart';
@@ -16,11 +17,13 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   final SendSyncUsecase sendSyncUsecase;
   final GetPictureUsecase getPictureUsecase;
   final ExportPictureUsecase exportPictureUsecase;
+  final DeletePictureUsecase deletePictureUsecase;
 
   GalleryBloc({
     @required this.sendSyncUsecase,
     @required this.getPictureUsecase,
     @required this.exportPictureUsecase,
+    @required this.deletePictureUsecase,
   }) : super(GalleryLoadingPicture());
   @override
   Stream<GalleryState> mapEventToState(GalleryEvent event) async* {
@@ -83,6 +86,13 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         pictures: event.pictures,
       ));
       yield GalleryExported();
+    } else if (event is GalleryDeletePictureEvent) {
+      yield GalleryDeleting();
+      await deletePictureUsecase(DeletePictureParams(
+        jwt: event.jwt,
+        pictures: event.pictures,
+      ));
+      yield GalleryDeleted();
     }
   }
 }

@@ -41,7 +41,8 @@ class Constants {
     "readNotification": "$protocol://$server/read-notification",
     "checkUnopenNotification": "$protocol://$server/check-unopen-notification",
     "getNotification": "$protocol://$server/get-notification",
-    "openAllNotification": "$protocol://$server/open-all-notification"
+    "openAllNotification": "$protocol://$server/open-all-notification",
+    "deletePicture": "$protocol://$server/delete-image"
   };
 
   static List<Map<String, dynamic>> locales = [

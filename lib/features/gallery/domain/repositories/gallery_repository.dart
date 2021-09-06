@@ -11,4 +11,5 @@ abstract class GalleryRepository {
     int skip,
   );
   Future<bool> exportPicture(List<Picture> pictures);
+  Future<bool> deletePicture(String jwt, List<Picture> pictures);
 }

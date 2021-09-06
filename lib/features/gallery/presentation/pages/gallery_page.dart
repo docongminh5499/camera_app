@@ -92,11 +92,53 @@ class _GalleryPageState extends State<GalleryPage> {
     this.setState(() {});
   }
 
-  void onDeleteItems() {}
+  void onDeleteItems() {
+    AppLocalizations localizations = AppLocalizations.of(context);
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(localizations.translate('deleteConfirm')),
+          actions: [
+            TextButton(
+              child: Text(
+                localizations.translate('cancel'),
+                style: TextStyle(
+                  color: getAppBlocState().setting.isDarkModeOn
+                      ? Color(0xFFBB6122)
+                      : Theme.of(context).primaryColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                localizations.translate('delete'),
+                style: TextStyle(
+                  color: getAppBlocState().setting.isDarkModeOn
+                      ? Color(0xFFBB6122)
+                      : Theme.of(context).primaryColor,
+                ),
+              ),
+              onPressed: () {
+                bloc.add(GalleryDeletePictureEvent(
+                  pictures: selectedItems,
+                  jwt: getAppBlocState().currentUser.jwt,
+                ));
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void onExportItems() {
     AppLocalizations localizations = AppLocalizations.of(context);
-
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -225,6 +267,14 @@ class _GalleryPageState extends State<GalleryPage> {
                 Navigator.of(context).pop();
                 showLoadingDialog();
               } else if (state is GalleryExported) {
+                Navigator.of(context).pop();
+                selectedItems = [];
+                changeNotifier.myNotifyListener();
+              } else if (state is GalleryDeleting) {
+                Navigator.of(context).pop();
+                showLoadingDialog();
+              } else if (state is GalleryDeleted) {
+                selectedItems.forEach((element) => items.remove(element));
                 Navigator.of(context).pop();
                 selectedItems = [];
                 changeNotifier.myNotifyListener();

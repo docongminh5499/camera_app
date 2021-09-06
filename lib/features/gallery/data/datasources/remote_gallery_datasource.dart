@@ -21,6 +21,12 @@ abstract class RemoteGalleryDatasource {
     DateTime start,
     DateTime end,
   );
+  Future<void> deletePicture(
+    String jwt,
+    String serverId,
+    String userId,
+    DateTime deletedTime,
+  );
 }
 
 class RemoteGalleryDatasourceImpl implements RemoteGalleryDatasource {
@@ -149,5 +155,29 @@ class RemoteGalleryDatasourceImpl implements RemoteGalleryDatasource {
       );
     }
     throw RemoteGalleryException();
+  }
+
+  @override
+  Future<void> deletePicture(
+    String jwt,
+    String serverId,
+    String userId,
+    DateTime deletedTime,
+  ) async {
+    final response = await client.post(
+      Uri.parse(Constants.urls['deletePicture']),
+      body: {
+        'token': jwt,
+        'userId': userId,
+        'serverId': serverId,
+        'deletedTime': deletedTime.toUtc().toString(),
+      },
+    ).timeout(
+      Duration(seconds: Constants.timeoutSecond),
+      onTimeout: () => http.Response('Error', 500),
+    );
+    if (!(response.statusCode == 200)) {
+      throw RemoteGalleryException();
+    }
   }
 }

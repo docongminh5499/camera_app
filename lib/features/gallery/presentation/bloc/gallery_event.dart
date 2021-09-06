@@ -62,3 +62,16 @@ class GalleryExportEvent extends GalleryEvent {
   @override
   List<Object> get props => <dynamic>[pictures];
 }
+
+class GalleryDeletePictureEvent extends GalleryEvent {
+  final List<Picture> pictures;
+  final String jwt;
+
+  GalleryDeletePictureEvent({
+    @required this.pictures,
+    @required this.jwt,
+  });
+
+  @override
+  List<Object> get props => <dynamic>[pictures, jwt];
+}

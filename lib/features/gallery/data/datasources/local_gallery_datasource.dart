@@ -30,10 +30,17 @@ abstract class LocalGalleryDatasource {
   Future<void> clearData(String userId);
   Future<PictureModel> savePicture(PictureModel model);
   Future<void> deletePicture(String serverId);
+  Future<void> deletePictureById(int id);
   Future<List<PictureModel>> getPicture(String userId, int limit, int skip);
   Future<void> updateServerId(PictureModel model);
   Future<PictureModel> insertOrAbort(PictureModel model);
   Future<void> deleteDeletedItem(DeletedItemModel model);
+  Future<void> addDeletedItem(
+    int id,
+    String serverId,
+    String userId,
+    DateTime deletedTime,
+  );
   Future<bool> exportPicture(PictureModel model);
 }
 
@@ -243,5 +250,33 @@ class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
       print("$error $_");
       return false;
     }
+  }
+
+  @override
+  Future<void> addDeletedItem(
+    int id,
+    String serverId,
+    String userId,
+    DateTime deletedTime,
+  ) async {
+    return await database.insert(
+      DeleteItem.table,
+      DeletedItemModel(
+        id: id,
+        serverId: serverId,
+        userId: userId,
+        deletedTime: deletedTime,
+      ).toJson(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
+  }
+
+  @override
+  Future<void> deletePictureById(int id) async {
+    return await database.delete(
+      Picture.table,
+      where: "id = ?",
+      whereArgs: [id],
+    );
   }
 }
