@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
@@ -21,12 +23,15 @@ class GalleryPage extends StatefulWidget {
   _GalleryPageState createState() => _GalleryPageState();
 }
 
-class _GalleryPageState extends State<GalleryPage> {
+class _GalleryPageState extends State<GalleryPage> with ChangeNotifier {
+  bool chooseMode = false;
   bool firstMount = true;
   bool endOfList = false;
   bool refreshing = false;
+  bool sent = false;
   double scrollThreshold = 50.0;
   List<Picture> items = [];
+  List<Picture> selectedItems = [];
   GalleryBloc bloc = sl<GalleryBloc>();
   ScrollController controller = new ScrollController();
 
@@ -44,13 +49,14 @@ class _GalleryPageState extends State<GalleryPage> {
 
   void onScrollEnd() {
     final extentAfter = controller.position.extentAfter;
-    if (extentAfter < scrollThreshold && !endOfList) {
+    if (extentAfter < scrollThreshold && !endOfList && !sent) {
       bloc.add(GalleryContinueLoadingEvent(
         jwt: getAppBlocState().currentUser.jwt,
         userId: getAppBlocState().currentUser.id,
         limit: Constants.limitPicturePerRequest,
         skip: items.length,
       ));
+      sent = true;
     }
   }
 
@@ -60,6 +66,37 @@ class _GalleryPageState extends State<GalleryPage> {
       userId: getAppBlocState().currentUser.id,
       limit: Constants.limitPicturePerRequest,
     ));
+  }
+
+  void changeChooseMode(bool value) {
+    this.setState(() {
+      selectedItems = [];
+      chooseMode = value;
+    });
+  }
+
+  void addImageFunc(Picture picture) {
+    selectedItems.add(picture);
+    print("Length ${selectedItems.length}");
+    this.setState(() {});
+  }
+
+  void removeImangeFunc(Picture picture) {
+    selectedItems.remove(picture);
+    print("Length ${selectedItems.length}");
+    this.setState(() {});
+  }
+
+  void onDeleteItems() {}
+
+  void onExportItems() {}
+
+  void onCancelItems() {
+    this.setState(() {
+      chooseMode = false;
+      selectedItems = [];
+    });
+    notifyListeners();
   }
 
   AppBloc getAppBloc() {
@@ -119,6 +156,9 @@ class _GalleryPageState extends State<GalleryPage> {
               } else if (state is GalleryContinueLoaded) {
                 items.addAll(state.items);
                 endOfList = state.endOfList;
+                sent = false;
+              } else if (state is GalleryContinueError) {
+                sent = false;
               }
             },
             child: BlocBuilder<GalleryBloc, GalleryState>(
@@ -175,28 +215,129 @@ class _GalleryPageState extends State<GalleryPage> {
                   );
                 }
 
-                return RefreshIndicator(
-                  onRefresh: onRefreshGallery,
-                  child: GridView.builder(
-                    controller: controller,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 500,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5,
+                return Column(
+                  children: [
+                    chooseMode
+                        ? Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 20,
+                              horizontal: 10,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  selectedItems.length.toString() +
+                                      " " +
+                                      localizations.translate('selectedItem'),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                ElevatedButton(
+                                  onPressed: onDeleteItems,
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      widget.themeColor,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    localizations.translate('delete'),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: onExportItems,
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      widget.themeColor,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    localizations.translate('export'),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: onCancelItems,
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      widget.themeColor,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    localizations.translate('cancel'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                    Expanded(
+                      child: Container(
+                        child: RefreshIndicator(
+                          onRefresh: onRefreshGallery,
+                          child: CustomScrollView(
+                            controller: controller,
+                            slivers: <Widget>[
+                              SliverGrid(
+                                gridDelegate:
+                                    SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 300.0,
+                                  mainAxisSpacing: 10.0,
+                                  crossAxisSpacing: 10.0,
+                                  childAspectRatio: 0.75,
+                                ),
+                                delegate: SliverChildBuilderDelegate(
+                                    (BuildContext context, int index) {
+                                  return GalleryItem(
+                                    key: ValueKey(items[index].serverId ??
+                                        items[index].id),
+                                    data: items[index],
+                                    chooseMode: chooseMode,
+                                    changeChooseModeFunc: changeChooseMode,
+                                    addImageFunc: addImageFunc,
+                                    removeImageFunc: removeImangeFunc,
+                                    listener: this,
+                                  );
+                                }, childCount: items.length),
+                              ),
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (BuildContext context, int index) {
+                                    return GalleryLoadingItem(
+                                      themeColor: widget.themeColor,
+                                    );
+                                  },
+                                  childCount: endOfList ? 0 : 1,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    itemCount: endOfList ? items.length : items.length + 1,
-                    itemBuilder: (BuildContext ctx, index) {
-                      if (index == items.length)
-                        return GalleryLoadingItem(
-                          themeColor: widget.themeColor,
-                        );
-                      return GalleryItem(
-                        key: ValueKey(items[index].serverId ?? items[index].id),
-                        data: items[index],
-                      );
-                    },
-                  ),
+                  ],
                 );
+
+                // return RefreshIndicator(
+                //   onRefresh: onRefreshGallery,
+                //   child: GridView.builder(
+                //     controller: controller,
+                //     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                //       maxCrossAxisExtent: 500,
+                //       crossAxisSpacing: 5,
+                //       mainAxisSpacing: 5,
+                //     ),
+                //     itemCount: endOfList ? items.length : items.length + 1,
+                //     itemBuilder: (BuildContext ctx, index) {
+                //       if (index == items.length)
+                //         return GalleryLoadingItem(
+                //           themeColor: widget.themeColor,
+                //         );
+                //       return GalleryItem(
+                //         key: ValueKey(items[index].serverId ?? items[index].id),
+                //         data: items[index],
+                //       );
+                //     },
+                //   ),
+                // );
               },
             ),
           ),

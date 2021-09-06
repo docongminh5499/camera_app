@@ -63,5 +63,9 @@
     "notificationTitle": "Notification",
     "getNotificationError": "Something went wrong. Please try again.",
     "notificationEmpty": "You haven't received any notification yet.",
-    "sendYou": "has send you a notification"
+    "sendYou": "has send you a notification",
+    "newNotification": "New Notification",
+    "subNewNotification": "You have received a notification",
+    "selectedItem": "selected items",
+    "export": "Export" 
 }

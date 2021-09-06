@@ -18,7 +18,7 @@ class Constants {
       new GlobalKey<NavigatorState>();
 
   static String protocol = "http";
-  static String server = "192.168.1.123:3000";
+  static String server = "192.168.43.157:3000";
   // static String server = "docongminh-camera-app-server.herokuapp.com";
 
   static Map<String, String> urls = {
@@ -52,6 +52,6 @@ class Constants {
   static Database database;
   static int timeoutSecond = 15;
   static AppLocalizations localizations;
-  static int limitPicturePerRequest = 4;
+  static int limitPicturePerRequest = 8;
   static int limitNotificationPerRequest = 10;
 }

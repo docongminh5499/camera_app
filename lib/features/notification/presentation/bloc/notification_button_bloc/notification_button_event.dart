@@ -8,11 +8,14 @@ abstract class NotificationButtonEvent extends Equatable {
 
 class GetUnopenNotificationNumberEvent extends NotificationButtonEvent {
   final String jwt;
-  GetUnopenNotificationNumberEvent({@required this.jwt});
+  final bool receiveTrigger;
+  GetUnopenNotificationNumberEvent({
+    @required this.jwt,
+    @required this.receiveTrigger,
+  });
   @override
-  List<Object> get props => [jwt];
+  List<Object> get props => [jwt, receiveTrigger];
 }
-
 
 class OpenAllNotificationEvent extends NotificationButtonEvent {
   final String jwt;

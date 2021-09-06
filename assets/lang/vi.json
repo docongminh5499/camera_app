@@ -63,5 +63,9 @@
     "notificationTitle": "Thông báo",
     "getNotificationError": "Xảy ra lỗi, vui lòng thử lại",
     "notificationEmpty": "Bạn chưa nhận thông báo nào.",
-    "sendYou": "đã gửi cho bạn một thông báo"
+    "sendYou": "đã gửi cho bạn một thông báo",
+    "newNotification": "Thông báo mới",
+    "subNewNotification": "Bạn vừa có thông báo mới",
+    "selectedItem": "hình đã chọn",
+    "export": "Xuất" 
 }

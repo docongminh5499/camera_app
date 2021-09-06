@@ -31,6 +31,7 @@ class NotificationButtonBloc
       if (result.numberOfNotification >= 0)
         yield NotificationGetUnopenSuccess(
           numberOfNotification: result.numberOfNotification,
+          receiveTrigger: event.receiveTrigger,
         );
       else
         yield NotificationGetUnopenError();

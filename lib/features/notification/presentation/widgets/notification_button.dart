@@ -1,5 +1,7 @@
+import 'package:flushbar/flushbar_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_camera_app_demo/cores/localize/app_localize.dart';
 import 'package:my_camera_app_demo/cores/utils/firebase_handler.dart';
 import 'package:my_camera_app_demo/features/app/presentation/bloc/app_bloc.dart';
 import 'package:my_camera_app_demo/features/notification/presentation/bloc/notification_button_bloc/notification_button_bloc.dart';
@@ -27,6 +29,14 @@ class _NotificationButtonState extends State<NotificationButton>
   void onReceiveNotification() {
     bloc.add(GetUnopenNotificationNumberEvent(
       jwt: gerAppBlocState().currentUser.jwt,
+      receiveTrigger: true,
+    ));
+  }
+
+  void onGetUnopenNotificationNumber() {
+    bloc.add(GetUnopenNotificationNumberEvent(
+      jwt: gerAppBlocState().currentUser.jwt,
+      receiveTrigger: false,
     ));
   }
 
@@ -73,7 +83,7 @@ class _NotificationButtonState extends State<NotificationButton>
     numberOfNotification = 0;
     firebaseHandler.addListener(onReceiveNotification);
     WidgetsBinding.instance.addObserver(this);
-    onReceiveNotification();
+    onGetUnopenNotificationNumber();
   }
 
   @override
@@ -87,12 +97,14 @@ class _NotificationButtonState extends State<NotificationButton>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      onReceiveNotification();
+      onGetUnopenNotificationNumber();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context);
+
     return BlocProvider(
       create: (context) => bloc,
       child: BlocListener(
@@ -100,6 +112,12 @@ class _NotificationButtonState extends State<NotificationButton>
         listener: (context, state) {
           if (state is NotificationGetUnopenSuccess) {
             numberOfNotification = state.numberOfNotification;
+            if (state.receiveTrigger) {
+              FlushbarHelper.createInformation(
+                title: localizations.translate('newNotification'),
+                message: localizations.translate('subNewNotification'),
+              ).show(context);
+            }
           } else if (state is NotificationOpenSuccess) {
             numberOfNotification = 0;
           }

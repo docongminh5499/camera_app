@@ -14,6 +14,7 @@ class GalleryLoadingItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        SizedBox(height: 50),
         CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(themeColor),
         ),
