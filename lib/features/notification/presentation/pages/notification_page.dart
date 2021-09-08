@@ -149,6 +149,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     children: [
                       Text(
                         localizations.translate('getNotificationError'),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -177,6 +178,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     children: [
                       Text(
                         localizations.translate('notificationEmpty'),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,

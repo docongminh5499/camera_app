@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                             delay: Duration(milliseconds: 900),
                             duration: Duration(milliseconds: 1000),
                             child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.5,
                               child: ElevatedButton(
                                 onPressed: () => login(),
                                 child: Text(localizations.translate("signIn")),
@@ -196,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           SizedBox(height: 10),
                           Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
+                            width: MediaQuery.of(context).size.width * 0.5,
                             child: ElevatedButton(
                               onPressed: () => login(),
                               child: Text(localizations.translate("signIn")),
