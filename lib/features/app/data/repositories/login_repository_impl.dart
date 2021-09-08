@@ -31,9 +31,10 @@ class LoginRepositoryImplement implements LoginRepository {
         final user = await remoteLoginDatasource.login(username, password);
         await Future.wait([
           localLoginDatasource.cacheUser(user),
-          localLoginDatasource.cachedJwt(user),
           localLoginDatasource.cachedSyncTime(),
+          galleryRepository.syncPrevData(),
         ]);
+        localLoginDatasource.cachedJwt(user);
         firebaseHandler.firebaseConfig(user);
         firebaseHandler.attachMessageOpenAppListener();
         return Right(user);
@@ -60,21 +61,44 @@ class LoginRepositoryImplement implements LoginRepository {
 
   Future<Either<Failure, void>> logout(String jwt, String userId) async {
     try {
-      final result = await localLoginDatasource.logout();
-      if (result == false) return Left(LogoutFailure());
+      final results = await Future.wait([
+        networkInfo.isConnected,
+        localLoginDatasource.logout(),
+        localLoginDatasource.getCachedFirebaseToken(),
+      ]);
+
+      final bool hasConnection = results[0] ;
+      final bool clearsUser = results[1];
+      final String prevToken = results[2];
+
+      if (clearsUser == false) {
+        return Left(LogoutFailure());
+      }
+
+      Future<bool> clearLocalData;
+      Future<bool> localClearToken;
+
       // Clear Firebase-Token
-      String prevToken = await localLoginDatasource.getCachedFirebaseToken();
       if (prevToken != null) {
-        await remoteLoginDatasource.removeFirebaseToken(jwt, prevToken);
-        await localLoginDatasource.clearFirebaseKey();
+        if (hasConnection)
+          await remoteLoginDatasource.removeFirebaseToken(jwt, prevToken);
+        localClearToken = localLoginDatasource.clearFirebaseKey();
       }
-      // Clear-Data
-      if (await networkInfo.isConnected) {
+
+      // Clear-User-Data
+      if (hasConnection) {
         await galleryRepository.sendSync(jwt, userId);
-        await localLoginDatasource.clearAllData(jwt, userId);
+        clearLocalData = localLoginDatasource.clearAllData(userId);
       } else {
-        await localLoginDatasource.clearSynedData(jwt, userId);
+        DateTime currentSyncTime = localLoginDatasource.getCurrentSyncTime();
+        clearLocalData = localLoginDatasource.clearSynedData(userId, currentSyncTime);
       }
+
+      await Future.wait([
+        clearLocalData,
+        localClearToken,
+      ]);
+
       // Clear-Sync-Time
       await localLoginDatasource.clearSyncTime();
       return Right(Unit);

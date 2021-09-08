@@ -287,7 +287,11 @@ class _GalleryPageState extends State<GalleryPage> {
                     direction: Axis.vertical,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [CircularProgressIndicator()],
+                    children: [CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        widget.themeColor,
+                      ),
+                    )],
                   );
                 } else if (state is GalleryFirstLoadError) {
                   return Column(

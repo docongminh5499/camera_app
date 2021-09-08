@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:my_camera_app_demo/cores/exceptions/exception.dart';
 import 'package:my_camera_app_demo/cores/utils/constants.dart';
+import 'package:my_camera_app_demo/features/app/domain/entities/cached_jwt.dart';
 import 'package:my_camera_app_demo/features/camera/data/models/picture_model.dart';
 import 'package:my_camera_app_demo/features/camera/domain/entities/picture.dart';
 import 'package:my_camera_app_demo/features/gallery/data/models/deleted_items_model.dart';
@@ -42,6 +43,9 @@ abstract class LocalGalleryDatasource {
     DateTime deletedTime,
   );
   Future<bool> exportPicture(PictureModel model);
+  Future<List<String>> getUserIdsPrevData();
+  Future<List<dynamic>> getJWTFromUserIds(List<String> ids);
+  Future<void> clearCachedJWT(String userId);
 }
 
 class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
@@ -277,6 +281,52 @@ class LocalGalleryDatasourceImpl implements LocalGalleryDatasource {
       Picture.table,
       where: "id = ?",
       whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<List<String>> getUserIdsPrevData() async {
+    final result = await database.query(
+      Picture.table,
+      columns: ['userId'],
+      distinct: true,
+      where: "serverId IS NULL",
+    );
+    final userIds = result.map((obj) => obj['userId'].toString()).toList();
+
+    final deleteResults =  await database.query(
+      DeleteItem.table,
+      columns: ['userId'],
+      distinct: true,
+    );
+    deleteResults.forEach((element) {
+      String userId = element['userId'].toString();
+      if (!(userIds.contains(userId)))
+        userIds.add(userId);
+    });
+
+    return userIds;
+  }
+
+  @override
+  Future<List<dynamic>> getJWTFromUserIds(List<String> ids) async {
+    final result = await database.query(
+      CachedJWT.table,
+      columns: ["userId", "jwt"],
+      where: "userId IN (?)",
+      whereArgs: [ids.join(", ")],
+      groupBy: 'userId',
+      having: "id = MIN(id)",
+    );
+    return result;
+  }
+
+  @override
+  Future<void> clearCachedJWT(String userId) async {
+    await database.delete(
+      CachedJWT.table,
+      where: "userId = ?",
+      whereArgs: [userId],
     );
   }
 }

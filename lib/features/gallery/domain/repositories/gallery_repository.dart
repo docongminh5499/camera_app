@@ -12,4 +12,5 @@ abstract class GalleryRepository {
   );
   Future<bool> exportPicture(List<Picture> pictures);
   Future<bool> deletePicture(String jwt, List<Picture> pictures);
+  Future<void> syncPrevData();
 }

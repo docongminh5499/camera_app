@@ -18,8 +18,8 @@ class Constants {
       new GlobalKey<NavigatorState>();
 
   static String protocol = "http";
-  static String server = "192.168.1.124:3000";
-  // static String server = "docongminh-camera-app-server.herokuapp.com";
+  //static String server = "192.168.1.123:3000";
+  static String server = "docongminh-camera-app-server.herokuapp.com";
 
   static Map<String, String> urls = {
     "login": "$protocol://$server/login",

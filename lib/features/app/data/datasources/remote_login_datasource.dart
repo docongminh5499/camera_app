@@ -9,13 +9,13 @@ import 'package:http/http.dart' as http;
 abstract class RemoteLoginDatasource {
   Future<UserModel> login(String username, String password);
   Future<bool> verifyJWT(UserModel user);
-  Future<void> removeFirebaseToken(String jwt, String prevToken);
+  Future<bool> removeFirebaseToken(String jwt, String prevToken);
 }
 
-class RemoteLoginDataSourceImplmentation implements RemoteLoginDatasource {
+class RemoteLoginDataSourceImplementation implements RemoteLoginDatasource {
   final http.Client client;
 
-  RemoteLoginDataSourceImplmentation({@required this.client});
+  RemoteLoginDataSourceImplementation({@required this.client});
 
   Future<UserModel> login(String username, String password) async {
     final response = await client.post(
@@ -49,13 +49,14 @@ class RemoteLoginDataSourceImplmentation implements RemoteLoginDatasource {
       return false;
   }
 
-  Future<void> removeFirebaseToken(String jwt, String prevToken) async {
-    await client.post(
+  Future<bool> removeFirebaseToken(String jwt, String prevToken) async {
+    final response = await client.post(
       Uri.parse(Constants.urls['removeFirebaseToken']),
       body: {'token': jwt, 'firebaseToken': prevToken},
     ).timeout(
       Duration(seconds: Constants.timeoutSecond),
       onTimeout: () => http.Response('Error', 500),
     );
+    return response.statusCode == 200;
   }
 }

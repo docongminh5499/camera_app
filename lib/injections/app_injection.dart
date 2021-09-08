@@ -47,7 +47,7 @@ void init(GetIt sl) {
   sl.registerLazySingleton<LocalSettingDataSource>(
       () => LocalSettingDataSourceImplementation(preferences: sl()));
   sl.registerLazySingleton<RemoteLoginDatasource>(
-      () => RemoteLoginDataSourceImplmentation(client: sl()));
+      () => RemoteLoginDataSourceImplementation(client: sl()));
   sl.registerLazySingleton<LocalLoginDatasource>(
     () => LocalLoginDatasourceImplementation(
       preferences: sl(),

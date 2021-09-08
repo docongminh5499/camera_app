@@ -139,7 +139,11 @@ class _ChooseGalleryPageState extends State<ChooseGalleryPage> {
                     direction: Axis.vertical,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [CircularProgressIndicator()],
+                    children: [CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        widget.themeColor,
+                      ),
+                    )],
                   );
                 } else if (state is GalleryFirstLoadError) {
                   return Column(

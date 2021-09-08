@@ -19,8 +19,8 @@ abstract class LocalLoginDatasource {
   Future<CachedJWTModel> cachedJwt(UserModel model);
   Future<void> cachedSyncTime();
   Future<String> getCachedFirebaseToken();
-  Future<void> clearAllData(String jwt, String userId);
-  Future<void> clearSynedData(String jwt, String userId);
+  Future<bool> clearAllData(String userId);
+  Future<bool> clearSynedData(String userId, DateTime currentSyncTime);
   DateTime getCurrentSyncTime();
   Future<void> clearSyncTime();
 }
@@ -87,7 +87,7 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
   }
 
   @override
-  Future<void> clearAllData(String jwt, String userId) async {
+  Future<bool> clearAllData(String userId) async {
     await Future.wait([
       database.delete(
         Picture.table,
@@ -105,11 +105,11 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
         whereArgs: [userId],
       ),
     ]);
+    return true;
   }
 
   @override
-  Future<void> clearSynedData(String jwt, String userId) async {
-    DateTime currentSyncTime = getCurrentSyncTime();
+  Future<bool> clearSynedData(String userId, DateTime currentSyncTime) async {
     await Future.wait([
       database.delete(
         Picture.table,
@@ -122,6 +122,7 @@ class LocalLoginDatasourceImplementation implements LocalLoginDatasource {
         whereArgs: [userId, currentSyncTime.toUtc().toString()],
       ),
     ]);
+    return true;
   }
 
   @override

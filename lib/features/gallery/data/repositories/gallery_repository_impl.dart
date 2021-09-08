@@ -186,4 +186,46 @@ class GalleryRepositoryImpl implements GalleryRepository {
     );
     return true;
   }
+
+  @override
+  Future<void> syncPrevData() async {
+    final userIds = await localDatasource.getUserIdsPrevData();
+    final userIdsAndJwt = await localDatasource.getJWTFromUserIds(userIds);
+
+    await Future.wait(
+      userIdsAndJwt.map((e) async {
+        final userId = e['userId'];
+        final jwt = e['jwt'];
+        final now = DateTime.now().toUtc();
+
+        final result = await Future.wait([
+          localDatasource.getCreatedPicture(userId, null, now),
+          localDatasource.getDeletedPicture(userId, null, now),
+        ]);
+
+        final List<PictureModel> createPictures = result[0];
+        final List<DeletedItemModel> deletedPictures = result[1];
+
+        await Future.wait([
+          Future.wait(createPictures.map((PictureModel element) async {
+            try {
+              await remoteDatasource.syncCreate(jwt, element);
+              await localDatasource.deletePictureById(element.id);
+            } catch (error, _) {
+              print("$error $_");
+            }
+          })),
+          Future.wait(deletedPictures.map((element) async {
+            try {
+              final result = await remoteDatasource.syncDelete(jwt, element);
+              await localDatasource.deleteDeletedItem(result);
+            } catch (error, _) {
+              print("$error $_");
+            }
+          })),
+        ]);
+        await localDatasource.clearCachedJWT(userId);
+      }).toList(),
+    );
+  }
 }
